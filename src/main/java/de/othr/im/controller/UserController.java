@@ -20,8 +20,6 @@ public class UserController {
 	public ModelAndView showRegisterForm() {
 		User userPlain = new User();
 		
-		System.out.println("break");
-		
 		ModelAndView mv = new ModelAndView("/user/registrationform");
 		mv.addObject("registerForm", userPlain);
 		
