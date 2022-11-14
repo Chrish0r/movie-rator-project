@@ -8,14 +8,24 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 
+/**
+ * This class is representing the entitiy {@link User} with its various attributes.
+ * 
+ * @author Przemyslaw Christof Gadek
+ *
+ */
+
 @Entity
-@Table(name = "users")
+@Table(name = User.TABLE)
 public class User {
+	
+	public static final String TABLE = "users";
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	Long id;
-
+	
+	@NotEmpty(message = "User name is mandatory")
 	String username;
 
 	@NotEmpty(message = "Email is mandatory")
@@ -24,6 +34,10 @@ public class User {
 	@NotEmpty(message = "Password is mandatory")
 	@Size(min = 4, message = "Password must contain at least 4 characters")
 	String password;
+	
+	public User() {
+		
+	}
 
 	public Long getId() {
 		return id;
