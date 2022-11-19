@@ -1,4 +1,4 @@
-package com.movierator.movierator.controllers;
+package com.movierator.movierator.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
