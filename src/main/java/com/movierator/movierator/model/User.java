@@ -6,6 +6,8 @@ import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -27,8 +29,8 @@ import org.springframework.security.core.userdetails.UserDetails;
  *
  */
 
-//@Entity
-//@Table(name = User.TABLE)
+@Entity
+@Table(name = User.TABLE)
 public class User implements UserDetails {
 	
 	private static final long serialVersionUID = 6994341383205631485L;
@@ -51,16 +53,16 @@ public class User implements UserDetails {
 	@Size(min = 4, message = "Password must contain at least 4 characters")
 	private String password;
 	
-//	private Integer active;
-//	private Integer usertype;
+	private Integer active;
+	private Integer usertype;
 	
-//	@ManyToMany(fetch = FetchType.EAGER)
-//	@JoinTable(
-//			name="userauthority",
-//			joinColumns = @JoinColumn(name="iduser"),
-//			inverseJoinColumns = @JoinColumn(name="idauthority")
-//			)
-//	private List<Authority> myauthorities = new ArrayList<Authority>();
+	@ManyToMany(fetch = FetchType.EAGER)
+	@JoinTable(
+			name="userauthority",
+			joinColumns = @JoinColumn(name="iduser"),
+			inverseJoinColumns = @JoinColumn(name="idauthority")
+			)
+	private List<Authority> myAuthorities = new ArrayList<Authority>();
 	
 	public User() {
 		
@@ -122,36 +124,36 @@ public class User implements UserDetails {
 		this.password = password;
 	}
 	
-//	public Integer getActive() {
-//		return active;
-//	}
-//
-//	public void setActive(Integer active) {
-//		this.active = active;
-//	}
-//
-//	public Integer getUsertype() {
-//		return usertype;
-//	}
-//
-//	public void setUsertype(Integer usertype) {
-//		this.usertype = usertype;
-//	}
-//
-//	public String getLogin() {
-//		return login;
-//	}
-//
-//	public void setLogin(String login) {
-//		this.login = login;
-//	}
-//
-//	public List<Authority> getMyauthorities() {
-//		return myauthorities;
-//	}
-//
-//	public void setMyauthorities(List<Authority> myauthorities) {
-//		this.myauthorities = myauthorities;
-//	}
+	public Integer getActive() {
+		return active;
+	}
+
+	public void setActive(Integer active) {
+		this.active = active;
+	}
+
+	public Integer getUsertype() {
+		return usertype;
+	}
+
+	public void setUsertype(Integer usertype) {
+		this.usertype = usertype;
+	}
+
+	public String getLogin() {
+		return login;
+	}
+
+	public void setLogin(String login) {
+		this.login = login;
+	}
+
+	public List<Authority> getMyAuthorities() {
+		return myAuthorities;
+	}
+
+	public void setMyAuthorities(List<Authority> myAuthorities) {
+		this.myAuthorities = myAuthorities;
+	}
 
 }

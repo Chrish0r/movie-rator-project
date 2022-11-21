@@ -8,12 +8,12 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import com.movierator.movierator.model.User;
-//import com.movierator.movierator.repository.UserRepository;
+import com.movierator.movierator.repository.UserRepository;
 
 @Controller
 public class UserController {
-//  @Autowired
-//	UserRepository userRepository;
+    @Autowired
+	UserRepository userRepository;
 
 	@GetMapping("/sign-up")
 	public String showRegisterForm(Model model) {
