@@ -46,10 +46,10 @@ public class HomeController {
 	@Autowired
 	RegularUserRepository regularUserRepository;
 
-	@GetMapping("/")
-	public String index(Model model) {
-		return "index";
-	}
+//	@GetMapping("/")
+//	public String index(Model model) {
+//		return "index";
+//	}
 
 	@RequestMapping(value = { "/", "/home" })
 	public String home(HttpServletRequest request, Principal principal) {
@@ -94,7 +94,7 @@ public class HomeController {
 			regularUserOpt = regularUserRepository.findRegularUserByUserId(loggedUserOpt.get().getId());
 			request.getSession().setAttribute(REGULAR_USER_SESSION, regularUserOpt.get());
 			
-			return "regular_user";
+			return "regular-user";
 		}
 		
 		logger.warn("An error occured while trying to load the http request based on " + principal.getName());

@@ -1,5 +1,6 @@
 package com.movierator.movierator.model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,8 +26,10 @@ import javax.validation.constraints.Size;
 
 @Entity
 @Table(name = User.TABLE)
-public class User {
+public class User implements Serializable {
 	
+	private static final long serialVersionUID = -6853534067306206163L;
+
 	public static final String TABLE = "users";
 
 	@Id
