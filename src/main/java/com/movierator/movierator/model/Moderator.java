@@ -7,11 +7,11 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = Admin.TABLE)
-public class Admin extends AbstractRole {
-
-	private static final long serialVersionUID = -211092667246287548L;
-	public static final String TABLE = "admins";
+@Table(name = Moderator.TABLE)
+public class Moderator extends AbstractRole {
+	
+	private static final long serialVersionUID = -7384982391621229700L;
+	public static final String TABLE = "moderators";
 	
 	@Column(name = "first_name")
 	private String firstName;

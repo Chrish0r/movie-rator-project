@@ -10,7 +10,7 @@ import javax.persistence.Table;
 @Table(name = Authority.TABLE)
 public class Authority {
 	
-	public static final String TABLE = "authority";
+	public static final String TABLE = "authorities";
 	
 	@Id
 	@GeneratedValue (strategy = GenerationType.IDENTITY)

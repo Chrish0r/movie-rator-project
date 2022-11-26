@@ -33,7 +33,6 @@ build/
 ### VS Code ###
 .vscode/
 
-### Credentials ###
-/config/*
-!/config/README.md
-!/config/*.example
+### Database Credentials ###
+/src/main/resources/application.properties
+

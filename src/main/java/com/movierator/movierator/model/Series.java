@@ -5,7 +5,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = Series.TABLE)
-public class Series extends MediaEntity {
+public class Series extends AbstractMediaEntity {
 
 	private static final long serialVersionUID = -5497910242659399979L;
 	public static final String TABLE = "series";

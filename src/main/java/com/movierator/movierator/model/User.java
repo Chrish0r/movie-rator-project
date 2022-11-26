@@ -1,13 +1,10 @@
 package com.movierator.movierator.model;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -19,9 +16,6 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
-
 /**
  * This class is representing the entitiy {@link User} with its various attributes.
  * 
@@ -31,10 +25,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 @Entity
 @Table(name = User.TABLE)
-public class User implements UserDetails {
+public class User {
 	
-	private static final long serialVersionUID = 6994341383205631485L;
-
 	public static final String TABLE = "users";
 
 	@Id
@@ -42,7 +34,7 @@ public class User implements UserDetails {
 	private Long id;
 	
 	@NotEmpty(message = "User name is mandatory")
-	@Column(name = "user name" , unique = true)
+	@Column(name = "user_name" , unique = true)
 	private String login;
 
 	@NotEmpty(message = "Email is mandatory")
@@ -54,13 +46,12 @@ public class User implements UserDetails {
 	private String password;
 	
 	private Integer active;
-	private Integer usertype;
-	
+
 	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(
-			name="userauthority",
-			joinColumns = @JoinColumn(name="iduser"),
-			inverseJoinColumns = @JoinColumn(name="idauthority")
+			name="users_authorities",
+			joinColumns = @JoinColumn(name="user_id"),
+			inverseJoinColumns = @JoinColumn(name="authority_id")
 			)
 	private List<Authority> myAuthorities = new ArrayList<Authority>();
 	
@@ -68,38 +59,6 @@ public class User implements UserDetails {
 		
 	}
 	
-	@Override
-	public Collection<? extends GrantedAuthority> getAuthorities() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-	
-	@Override
-	public String getUsername() {
-		return this.login;
-	}
-	
-
-	@Override
-	public boolean isAccountNonExpired() {
-		return true;
-	}
-
-	@Override
-	public boolean isAccountNonLocked() {
-		return true;
-	}
-
-	@Override
-	public boolean isCredentialsNonExpired() {
-		return true;
-	}
-
-	@Override
-	public boolean isEnabled() {
-		return true;
-	}
-
 	public Long getId() {
 		return id;
 	}
@@ -132,14 +91,6 @@ public class User implements UserDetails {
 		this.active = active;
 	}
 
-	public Integer getUsertype() {
-		return usertype;
-	}
-
-	public void setUsertype(Integer usertype) {
-		this.usertype = usertype;
-	}
-
 	public String getLogin() {
 		return login;
 	}
@@ -155,5 +106,4 @@ public class User implements UserDetails {
 	public void setMyAuthorities(List<Authority> myAuthorities) {
 		this.myAuthorities = myAuthorities;
 	}
-
 }

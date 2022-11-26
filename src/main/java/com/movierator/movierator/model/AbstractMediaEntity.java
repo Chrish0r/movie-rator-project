@@ -8,12 +8,13 @@ import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 
 @MappedSuperclass
-public abstract class MediaEntity implements Serializable {
+public abstract class AbstractMediaEntity implements Serializable {
 
 	private static final long serialVersionUID = -4761614502676589955L;
 	
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	
 	private long id;
 
 	

@@ -26,35 +26,39 @@ public class SecurityConfiguration {
 
 		http.csrf().disable();
 
-		http.authorizeRequests().antMatchers("/sign-up").permitAll().antMatchers("/login").permitAll()
-				.antMatchers("/logged-in").hasAnyAuthority("Admin").antMatchers("/prelogout")
-				.hasAuthority("Admin")
-//               .antMatchers("/users/**", "/settings/**").hasAuthority("Admin")
-//        		.antMatchers("/admin/**", "/settings/**").hasAuthority("ADMIN")
-				// more permissions here...
-				.anyRequest().authenticated().and().formLogin().loginPage("/login").and().logout()
-				.logoutSuccessUrl("/login").invalidateHttpSession(true)
+		http.authorizeRequests().antMatchers("/sign-up").permitAll() // all users can access this page
+			.antMatchers("/login").permitAll() // all users can access this page
+
+				.antMatchers("/admin/**", "/settings/**").hasAuthority("ADMIN"	) // only admins can access this page
+				// more permissions here....
+				.antMatchers("/moderator/**", "/settings/**").hasAuthority("MODERATOR") // only moderatos can access this page
+				.antMatchers("/regular-user/**", "/settings/**").hasAuthority("REGULAR_USER") // only regular users, i.e. registered
+																				// users can access this page
+				.anyRequest().authenticated().and().formLogin()
+				// .loginPage("/login")
+				.and().logout().logoutSuccessUrl("/login").invalidateHttpSession(true)
 
 				.permitAll();
 
 		return http.build();
 	}
-	
-    @Bean
-    public WebSecurityCustomizer webSecurityCustomizer() {
-        return (web) -> web.ignoring().antMatchers("/images/**", "/js/**", "/webjars/**");
-    }
-    
-    @Bean
-    public AuthenticationManager authenticationManager(
-    		AuthenticationConfiguration authenticationConfiguration) throws Exception {
-        return authenticationConfiguration.getAuthenticationManager();
-    }
-    
-    @Bean
+
+	@Bean
+	public WebSecurityCustomizer webSecurityCustomizer() {
+		return (web) -> web.ignoring().antMatchers("/images/**", "/js/**", "/webjars/**");
+	}
+
+	@Bean
+	public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration)
+			throws Exception {
+		return authenticationConfiguration.getAuthenticationManager();
+	}
+
+	@Bean
 	public PasswordEncoder getPasswordEncoder() {
-    	// TODO will need BCryptPasswordEncoder() to hash passwords - default strenght (int) is 10
-		//return new BCryptPasswordEncoder();
+		// TODO will need BCryptPasswordEncoder() to hash passwords - default strenght
+		// (int) is 10
+		// return new BCryptPasswordEncoder();
 		return NoOpPasswordEncoder.getInstance();
 	}
 
