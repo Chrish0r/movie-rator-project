@@ -13,7 +13,6 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.movierator.movierator.model.Admin;
@@ -45,19 +44,23 @@ public class HomeController {
 	
 	@Autowired
 	RegularUserRepository regularUserRepository;
+	
+	@RequestMapping ("/")
+	public String showIndexView() {
+		return "index";
+	}
 
-//	@GetMapping("/")
-//	public String index(Model model) {
-//		return "index";
-//	}
 
-	@RequestMapping(value = { "/", "/home" })
+	@RequestMapping("/home")
 	public String home(HttpServletRequest request, Principal principal) {
+		
 
 		@SuppressWarnings("unchecked")
 		List<GrantedAuthority> authorities = (List<GrantedAuthority>) SecurityContextHolder.getContext()
 				.getAuthentication().getAuthorities();
 		String myAuthorities = authorities.toString();
+		
+		
 
 		logger.info("Authorities of the logged user " + principal.getName() + ": " + myAuthorities);
         

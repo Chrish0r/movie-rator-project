@@ -1,10 +1,13 @@
 package com.movierator.movierator.model;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.validation.Valid;
+import javax.validation.constraints.Size;
 
 @Entity
 @Table(name = Admin.TABLE)
@@ -14,12 +17,15 @@ public class Admin extends AbstractRole {
 	public static final String TABLE = "admins";
 	
 	@Column(name = "first_name")
+	@Size(min =4, message = "First name must contain at least 2 characters!")
 	private String firstName;
 	@Column(name = "last_name")
+	@Size(min =4, message = "Last name must contain at least 2 characters!")
 	private String lastName;
 	
-	@OneToOne
+	@OneToOne(cascade = CascadeType.MERGE)
 	@JoinColumn(name = "user_id", referencedColumnName = "id")
+	@Valid 
 	User user;
 	
 	public String getFirstName() {

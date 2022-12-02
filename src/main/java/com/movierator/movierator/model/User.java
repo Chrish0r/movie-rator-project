@@ -19,6 +19,7 @@ import javax.validation.constraints.Size;
 
 /**
  * This class is representing the entitiy {@link User} with its various attributes.
+ * The user also represents the credential entity regarding the log-in, i.e. authorization process.
  * 
  * @author Przemyslaw Christof Gadek
  *
@@ -41,7 +42,7 @@ public class User implements Serializable {
 	private String login;
 
 	@NotEmpty(message = "Email is mandatory")
-	@Column(unique = true)
+
 	private String email;
 	
 	@NotEmpty(message = "Password is mandatory")

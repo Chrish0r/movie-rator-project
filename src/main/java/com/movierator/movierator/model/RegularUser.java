@@ -1,9 +1,11 @@
 package com.movierator.movierator.model;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.validation.Valid;
 
 @Entity
 @Table(name = RegularUser.TABLE)
@@ -12,8 +14,9 @@ public class RegularUser extends AbstractRole {
 	private static final long serialVersionUID = 5088115185535822969L;
 	public static final String TABLE = "regular_users";
 	
-	@OneToOne
+	@OneToOne(cascade = CascadeType.MERGE)
 	@JoinColumn(name = "user_id", referencedColumnName = "id")
+	@Valid 
 	User user;
 	
 	public User getUser() {

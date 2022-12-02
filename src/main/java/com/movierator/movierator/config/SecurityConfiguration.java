@@ -8,7 +8,7 @@ import org.springframework.security.config.annotation.authentication.configurati
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
-import org.springframework.security.crypto.password.NoOpPasswordEncoder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
@@ -17,7 +17,7 @@ import com.movierator.movierator.service.MyUserDetailsService;
 @Configuration
 @EnableWebSecurity
 public class SecurityConfiguration {
-
+	
 	@Autowired
 	MyUserDetailsService userDetailsService;
 
@@ -26,16 +26,22 @@ public class SecurityConfiguration {
 
 		http.csrf().disable();
 
-		http.authorizeRequests().antMatchers("/sign-up").permitAll() // all users can access this page
-			.antMatchers("/login").permitAll() // all users can access this page
+		http.authorizeRequests().antMatchers("/").permitAll() // all users can access this page
+				.antMatchers("/user/**").permitAll() // all users can access this page
+				.antMatchers("/login").permitAll() // all users can access this page
 
-				.antMatchers("/admin/**", "/settings/**").hasAuthority("ADMIN"	) // only admins can access this page
+				.antMatchers("/admin/**", "/settings/**").hasAuthority("ADMIN") // only admins can access this page
 				// more permissions here....
-				.antMatchers("/moderator/**", "/settings/**").hasAuthority("MODERATOR") // only moderatos can access this page
-				.antMatchers("/regular-user/**", "/settings/**").hasAuthority("REGULAR_USER") // only regular users, i.e. registered
-																				// users can access this page
-				.anyRequest().authenticated().and().formLogin()
-				// .loginPage("/login")
+				.antMatchers("/moderator/**", "/settings/**").hasAuthority("MODERATOR") // only moderators can access
+																						// this page
+				.antMatchers("/regular-user/**", "/settings/**").hasAuthority("REGULAR_USER") // only regular (and
+																									// registered)
+																									// users can access
+																									// this page
+
+				.anyRequest().authenticated()
+				.and().formLogin()
+				.loginPage("/login")
 				.and().logout().logoutSuccessUrl("/login").invalidateHttpSession(true)
 
 				.permitAll();
@@ -53,13 +59,9 @@ public class SecurityConfiguration {
 			throws Exception {
 		return authenticationConfiguration.getAuthenticationManager();
 	}
-
+	
 	@Bean
-	public PasswordEncoder getPasswordEncoder() {
-		// TODO will need BCryptPasswordEncoder() to hash passwords - default strenght
-		// (int) is 10
-		// return new BCryptPasswordEncoder();
-		return NoOpPasswordEncoder.getInstance();
+	public PasswordEncoder encoder() {
+	    return new BCryptPasswordEncoder();
 	}
-
 }

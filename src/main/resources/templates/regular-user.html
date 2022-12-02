@@ -1,11 +1,22 @@
-<!DOCTYPE HTML>
-<html xmlns:th="http://www.thymeleaf.org">
-<head> 
-    <title>Movie Rator</title> 
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-</head>
-<body>
-    <h1>Welcome to <em>Movie Rator</em></h1>
-    <p>Test - Regular User Page - for registered users</p>
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{fragments/regular-user-layout}">
+ <head>
+
+ </head>
+ <body>     
+ 
+ <div layout:fragment="content" >
+      
+      <div class="hero-unit">
+     
+        <h3>
+        <br><br>
+          Welcome page for the regular user!
+        </h3>
+        
+      </div>
+</div>
+    
 </body>
-</html>
+</html>	
