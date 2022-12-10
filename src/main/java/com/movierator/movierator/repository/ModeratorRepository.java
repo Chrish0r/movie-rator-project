@@ -11,7 +11,7 @@ import com.movierator.movierator.model.Moderator;
 @Repository
 public interface ModeratorRepository extends JpaRepository<Moderator, Long>{
 	
-	@Query("select m from Moderator m where m.user.id = :userId")
+	@Query("SELECT m FROM Moderator m WHERE m.user.id = :userId")
 	Optional<Moderator> findModeratorByUserId(Long userId); 
 	
 	

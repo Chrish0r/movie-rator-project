@@ -9,7 +9,6 @@ import com.movierator.movierator.model.RegularUser;
 
 public interface RegularUserRepository extends JpaRepository<RegularUser, Long> {
 	
-	@Query("select ru from RegularUser ru where ru.user.id = :userId")
+	@Query("SELECT ru FROM RegularUser ru WHERE ru.user.id = :userId")
 	Optional<RegularUser> findRegularUserByUserId(Long userId); 
-
 }

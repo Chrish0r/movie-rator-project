@@ -23,7 +23,11 @@ public class Authority implements Serializable {
 	private String description;
 	
 	public Authority(Long authority_id) {
-		this.id= authority_id;
+		this.id = authority_id;
+	}
+	
+	public Authority() {
+		
 	}
 
 	public Long getId() {

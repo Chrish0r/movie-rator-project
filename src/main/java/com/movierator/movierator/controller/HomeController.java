@@ -12,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.movierator.movierator.model.Admin;
@@ -45,22 +44,18 @@ public class HomeController {
 	@Autowired
 	RegularUserRepository regularUserRepository;
 	
-	@RequestMapping ("/")
+	@RequestMapping ("/start")
 	public String showIndexView() {
 		return "index";
 	}
 
-
-	@RequestMapping("/home")
+	@RequestMapping(value={"/", "/home"})
 	public String home(HttpServletRequest request, Principal principal) {
 		
-
 		@SuppressWarnings("unchecked")
 		List<GrantedAuthority> authorities = (List<GrantedAuthority>) SecurityContextHolder.getContext()
 				.getAuthentication().getAuthorities();
 		String myAuthorities = authorities.toString();
-		
-		
 
 		logger.info("Authorities of the logged user " + principal.getName() + ": " + myAuthorities);
         
@@ -89,7 +84,7 @@ public class HomeController {
 			
 			return "moderator";
 		}
-		if (myAuthorities.contains("REGULAR_USER")) {
+		if (myAuthorities.contains("REGULAR USER")) {
 			Optional<RegularUser> regularUserOpt;
 			
 			// TODO check is Optional present and return error or logger if not - mb no need

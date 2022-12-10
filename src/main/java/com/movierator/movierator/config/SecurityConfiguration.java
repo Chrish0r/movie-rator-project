@@ -26,9 +26,10 @@ public class SecurityConfiguration {
 
 		http.csrf().disable();
 
-		http.authorizeRequests().antMatchers("/").permitAll() // all users can access this page
-				.antMatchers("/user/**").permitAll() // all users can access this page
-				.antMatchers("/login").permitAll() // all users can access this page
+		http.authorizeRequests().antMatchers("/start").permitAll() // index view
+				.antMatchers("/api/**").permitAll()  
+				.antMatchers("/user/**").permitAll()
+				.antMatchers("/login").permitAll() 
 
 				.antMatchers("/admin/**", "/settings/**").hasAuthority("ADMIN") // only admins can access this page
 				// more permissions here....
@@ -36,9 +37,6 @@ public class SecurityConfiguration {
 																						// this page
 				.antMatchers("/regular-user/**", "/settings/**").hasAuthority("REGULAR_USER") // only regular (and
 																									// registered)
-																									// users can access
-																									// this page
-
 				.anyRequest().authenticated()
 				.and().formLogin()
 				.loginPage("/login")
