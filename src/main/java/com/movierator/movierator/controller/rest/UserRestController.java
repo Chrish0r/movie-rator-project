@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.ModelAndView;
 
 import com.movierator.movierator.model.Authority;
 import com.movierator.movierator.model.RegularUser;
@@ -71,68 +70,67 @@ public class UserRestController {
 			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
-	
-	
+
 	@GetMapping("/{id}")
-	  public ResponseEntity<User> getUserById(@PathVariable("id") long id) {
-	    Optional<User> userOpt = userRepository.findById(id);
+	public ResponseEntity<User> getUserById(@PathVariable("id") long id) {
+		Optional<User> userOpt = userRepository.findById(id);
 
-	    if (userOpt.isPresent()) {
-	      return new ResponseEntity<>(userOpt.get(), HttpStatus.OK);
-	    } else {
-	      return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-	    }
-	  }
+		if (userOpt.isPresent()) {
+			return new ResponseEntity<>(userOpt.get(), HttpStatus.OK);
+		} else {
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
+	}
 
-//	@PostMapping("/")
-//	public ResponseEntity<List<User>> createUser(@RequestBody User user) {
-//
-//		logger.info("Processing the add with POST");
-//		logger.info(user.getLogin());
-//
-//		User userTemp = user
-//		userTemp.setPassword((passwordEncoder.encode(user.getPassword())));
-//
-//		List<Authority> myAuthorities = new ArrayList<Authority>();
-//
-//		myAuthorities.add(new Authority(Constants.AUTHORITY_REGULAR_USER));
-//
-//		userTemp.setMyAuthorities(myAuthorities);
-//		userTemp.setActive(1);
-//
-//		try {
-//			// User is persisted into the database
-//			User userDB = userRepository.save(userTemp);
-//
-//			return new ResponseEntity<>(userDB, HttpStatus.CREATED);
-//		} catch (Exception e) {
-//			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
-//		}
-//
-////		try {
-////			// Regular user is persisted into the database
-	// RegularUser regularUser = new RegularUser();
-	// regularUser.setEmail(userTeo.getEmail());
+	@PostMapping("/")
+	public ResponseEntity<RegularUser> createRegularUser(@RequestBody User user) {
 
-////			regularUserRepository.save(regularUser);
-////
-////		} catch (Exception e) {
-////			// TODO: handle exception
-////		}
-//	}
-	
+		logger.info("Processing the add with POST");
+		logger.info(user.getLogin());
+
+		RegularUser regularUserDB = new RegularUser();
+		User userDB = new User();
+		userDB.setPassword((passwordEncoder.encode(user.getPassword())));
+		userDB.setLogin(user.getLogin());
+		userDB.setEmail(user.getEmail());
+		userDB.setActive(1);
+
+		regularUserDB.setUser(userDB);
+
+		List<Authority> myAuthorities = new ArrayList<Authority>();
+		myAuthorities.add(new Authority(Constants.AUTHORITY_REGULAR_USER));
+
+		userDB.setMyAuthorities(myAuthorities);
+		userDB.setActive(1);
+
+		try {
+			/*
+			 * Persisting the regularUser object into the database will also automatically
+			 * persist the user object into the database since regularUser contains user and
+			 * CascadeType in the corresponding model class is set to 'ALL'.
+			 */
+			regularUserDB = regularUserRepository.save(regularUserDB);
+
+			return new ResponseEntity<>(regularUserDB, HttpStatus.CREATED);
+
+		} catch (Exception e) {
+			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+
+	}
+
 	@PutMapping("/{id}")
 	public ResponseEntity<User> updateEmailByUserId(@RequestParam String email, @RequestParam long id) {
 		logger.info("Processing updating an user email with PUT");
-		
-		if(email.isBlank()) {
+
+		if (email.isBlank()) {
 			throw new IllegalArgumentException("New email may not be empty!");
 		}
 		User user = userRepository.findById(id)
 				.orElseThrow(() -> new IllegalArgumentException("Invalid user Id:" + id));
-		
+
 		user.setEmail(email);
-		
+
 		try {
 			// Updating i.e., persisting user into the database
 			userRepository.save(user);
@@ -140,7 +138,6 @@ public class UserRestController {
 		} catch (Exception e) {
 			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
-		
 	}
 
 	@DeleteMapping("/{id}")

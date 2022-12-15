@@ -46,7 +46,7 @@ public class UserController {
 	@Autowired
 	RegularUserRepository regularUserRepository;
 
-	// TODO: public String showPaginatedUsers() -> might need for Admin
+	// TODO: public String showPaginatedUsers() -> might need for admin
 
 	@RequestMapping("/user/add")
 	public ModelAndView showAddRegularUserForm() {
@@ -102,7 +102,6 @@ public class UserController {
 		regularUserRepository.save(regularUserForm);
 
 		mv.addObject("useradded", "User added!");
-//        mv.setViewName("redirect:/user/all");
 		mv.setViewName("redirect:/login");
 
 		return mv;

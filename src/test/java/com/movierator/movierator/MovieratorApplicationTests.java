@@ -1,21 +1,54 @@
 package com.movierator.movierator;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
+import java.util.List;
+
 import org.junit.jupiter.api.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.movierator.movierator.model.User;
+import com.movierator.movierator.test.UserRestAPITester;
+
 /**
- * This class is responsible for testing methods by using JUnit Framework.
- * The idea is to use the black-box-concept in regard to testing.
+ * This class is responsible for testing methods by using JUnit Framework. The
+ * idea is to use the black-box-concept in regard to testing.
  *
- * @author   Przemyslaw Christof Gadek
+ * @author Przemyslaw Christof Gadek
  */
 @SpringBootTest
 class MovieratorApplicationTests {
+	private final Logger logger = LoggerFactory.getLogger(this.getClass());
+
+	@Autowired
+	public UserRestAPITester client;
 
 	@Test
-	void contextLoads() {
+	public void userClientSuccessfullyReturnsUser() throws JsonProcessingException {
+
+		User userResponse = this.client.testGetUserAPI(5L);
+		logger.info("Obtained following user: " + userResponse.getLogin());
+
+		assertNotNull(userResponse);
+		// in this case the following test scenario in not required (from a logical
+		// point of view), but shown for demonstration purposes
+		assertEquals(userResponse.getLogin(), "max");
 	}
-	
-	// TODO JUnit Tests for REST
+
+	@Test
+	public void userClientSuccessfullyReturnsAllActiveUsers() throws JsonProcessingException {
+
+		List<User> userResponse = this.client.testGetAllActiveUsersRestAPI();
+
+		logger.info("Size of user-list regading active users only: " + userResponse.size());
+
+		assertNotNull(userResponse);
+
+	}
 
 }

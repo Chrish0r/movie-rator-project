@@ -14,7 +14,11 @@ public class RegularUser extends AbstractRole {
 	private static final long serialVersionUID = 5088115185535822969L;
 	public static final String TABLE = "regular_users";
 	
-	@OneToOne(cascade = CascadeType.MERGE)
+	public RegularUser() {
+		
+	}
+	
+	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "user_id", referencedColumnName = "id")
 	@Valid 
 	User user;
