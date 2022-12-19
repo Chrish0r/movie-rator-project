@@ -14,6 +14,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 
@@ -40,9 +41,9 @@ public class User implements Serializable {
 	@NotEmpty(message = "User name is mandatory")
 	@Column(name = "user_name" , unique = true)
 	private String login;
-
+	
+	@Email(message = "No valid email-address")
 	@NotEmpty(message = "Email is mandatory")
-
 	private String email;
 	
 	@NotEmpty(message = "Password is mandatory")
