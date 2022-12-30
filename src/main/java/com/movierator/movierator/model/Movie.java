@@ -9,8 +9,10 @@ public class Movie extends AbstractMediaEntity {
 	private static final long serialVersionUID = 8788023230378376597L;
 	public static final String TABLE = "movies";
 
-	public Movie(String name) {
+	public Movie(long id, String name) {
 		this.name = name;
+		
+		this.setId(id);
 	}
 
 	private String name;

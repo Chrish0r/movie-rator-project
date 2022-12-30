@@ -11,13 +11,17 @@ import org.springframework.stereotype.Component;
 
 import com.movierator.movierator.model.Movie;
 import com.movierator.movierator.repository.MovieRepository;
+import com.movierator.movierator.repository.SeriesRepository;
 
 @Component
-public class FetchAllMovies {
-  private static final Logger logger = LoggerFactory.getLogger(FetchAllMovies.class);
+public class FetchAllMoviesAndSeries {
+  private static final Logger logger = LoggerFactory.getLogger(FetchAllMoviesAndSeries.class);
 
   @Autowired
   private MovieRepository movieRepo;
+
+  @Autowired
+  private SeriesRepository seriesRepo;
 
   @Autowired
   private TMDBAPIFactory tmdbApiFactory;
@@ -31,6 +35,15 @@ public class FetchAllMovies {
     // process significantly
 
     TMDBApi<TMDBMovieResponse> moviesApi = tmdbApiFactory.createForEntity(TMDBEntities.MOVIE);
+
+    List<TMDBMovie> tmdbMovies = moviesApi.getAllEntities();
+    List<Movie> movies = new ArrayList<>();
+    for (TMDBMovie tmdbMovie : tmdbMovies) {
+      movies.add(new Movie(tmdbMovie.getTitle()));
+    }
+
+    logger.info("Saved {} movies into database", movies.size());
+    movieRepo.saveAll(movies);
 
     int totalPages = 1;
     for (int page = 1; page <= totalPages && page <= 10; page++) {
