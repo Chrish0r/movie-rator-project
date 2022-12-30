@@ -36,3 +36,5 @@ build/
 ### Database Credentials ###
 /src/main/resources/application.properties
 
+
+notes.md
