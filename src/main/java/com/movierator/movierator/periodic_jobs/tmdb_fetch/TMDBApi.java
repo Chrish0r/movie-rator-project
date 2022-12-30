@@ -45,19 +45,24 @@ class TMDBApi<T extends TMDBResponse<U>, U> {
   public List<U> getAllEntities() {
     List<U> entities = new ArrayList<>();
 
-    // TODO: Do pagination in parallel with multiple threads - Would speed up process significantly
+    // TODO: Do pagination in parallel with multiple threads - Would speed up
+    // process significantly
 
     int totalPages = 1;
     for (int page = 1; page <= totalPages; page++) {
-      T response = this.getEntitiesForPage(page);
+      try {
+        T response = this.getEntitiesForPage(page);
 
-      totalPages = response.total_pages;
+        totalPages = response.total_pages;
 
-      for (U resultEntity : response.results) {
-        entities.add(resultEntity);
+        for (U resultEntity : response.results) {
+          entities.add(resultEntity);
+        }
+      } catch (Exception e) {
+        logger.error("Failed to get entities for page {} with error: {} Skipping page...", page, e.toString());
       }
     }
-    
+
     return entities;
   }
 
@@ -65,7 +70,8 @@ class TMDBApi<T extends TMDBResponse<U>, U> {
     Map<String, String> params = new HashMap<>();
     params.put("page", Integer.toString(page));
 
-    ResponseEntity<T> response = restTemplate.exchange(urlTemplate, HttpMethod.GET, httpEntity, this.responseClass, params);
+    ResponseEntity<T> response = restTemplate.exchange(urlTemplate, HttpMethod.GET, httpEntity, this.responseClass,
+        params);
     logger.info("Got response with status {} for page {}", response.getStatusCode().value(), page);
 
     return response.getBody();
