@@ -14,8 +14,13 @@
         </div>
       </form>
       <h2>Results:</h2>
-      <div th:each="result : ${results}" class="result">
-        <h5 th:text="${result.title}"></h5>
+      <div th:each="result : ${results}" class="row result">
+        <div class="col">
+          <h5 th:text="${result.title}"></h5>
+        </div>
+        <div class="col">
+          <a th:href="${'/media/' + result.id}">Go to</a>
+        </div>
       </div>
     </div>
   </body>
