@@ -30,11 +30,11 @@ public class FetchAllMovies {
     // TODO: Do pagination in parallel with multiple threads - Would speed up
     // process significantly
 
-    TMDBApi api = tmdbApiFactory.createForEntity(TMDBEntities.MOVIE);
+    TMDBApi<TMDBMovieResponse> moviesApi = tmdbApiFactory.createForEntity(TMDBEntities.MOVIE);
 
     int totalPages = 1;
     for (int page = 1; page <= totalPages && page <= 10; page++) {
-      TMDBMovieResponse response = api.getEntitiesForPage(page);
+      TMDBMovieResponse response = moviesApi.getEntitiesForPage(page);
 
       totalPages = response.getTotal_pages();
 
@@ -50,5 +50,27 @@ public class FetchAllMovies {
     }
 
     logger.info("Saved in total {} movies into database", totalSavedMovies);
+  }
+
+  private <T extends TMDBEntity> getAllEntitiesFromAPI(TMDBApi api) {
+    List<T> entities = new ArrayList<>();
+    
+    int totalPages = 1;
+    for (int page = 1; page <= totalPages && page <= 10; page++) {
+      TMDBResponse response = api.getEntitiesForPage(page);
+
+      totalPages = response.getTotal_pages();
+
+      
+
+      for (TMDBMovie tmdbMovie : response.getMovies()) {
+        // TODO: Create mapping iterator instead of saving it into temp variable
+        movies.add(new Movie(tmdbMovie.getTitle()));
+      }
+      // TODO: Update already existing movies instead of only appending
+      movieRepo.saveAll(movies);
+      totalSavedMovies += movies.size();
+      logger.info("Saved {} movies into database", movies.size());
+    }
   }
 }

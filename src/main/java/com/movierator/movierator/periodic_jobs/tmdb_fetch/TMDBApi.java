@@ -15,7 +15,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
-// TODO: Make this generic to be usable for series too
+// TODO: Make this generic to be usable for series too<
 
 @Component
 class TMDBAPIFactory {
@@ -26,21 +26,19 @@ class TMDBAPIFactory {
   private TMDBConfig config;
 
   public TMDBApi createForEntity(TMDBEntities entity) {
-    TMDBApi api;
     switch (entity) {
       case MOVIE:
-        api = new TMDBApi(restTemplateBuilder.build(), config, "/movie/popular");
-        break;
+        return new TMDBApi<TMDBMovieResponse>(restTemplateBuilder.build(), config, "/movie/popular", TMDBMovieResponse.class);
+      case SERIES:
+        return new TMDBApi<TMDBSeriesResponse>(restTemplateBuilder.build(), config, "/tv/popular", TMDBSeriesResponse.class);
       default:
         // Why is this necessary? This should never happen!
         throw new RuntimeException("Invalid entity type");
     }
-
-    return api;
   }
 }
 
-class TMDBApi {
+class TMDBApi<T extends TMDBResponse> {
   private static final Logger logger = LoggerFactory.getLogger(TMDBApi.class);
 
   private HttpEntity<String> httpEntity;
@@ -50,9 +48,12 @@ class TMDBApi {
 
   private TMDBConfig config;
 
-  TMDBApi(RestTemplate restTemplate, TMDBConfig tmdbConfig, String urlEndpoint) {
+  private Class<T> responseClass;
+
+  TMDBApi(RestTemplate restTemplate, TMDBConfig tmdbConfig, String urlEndpoint, Class<T> response) {
     this.restTemplate = restTemplate;
     this.config = tmdbConfig;
+    this.responseClass = response;
 
     HttpHeaders headers = new HttpHeaders();
     headers.add("Authorization", "Bearer " + config.getApiToken());
@@ -66,7 +67,7 @@ class TMDBApi {
         .toUriString();
   }
 
-  public TMDBMovieResponse getEntitiesForPage(int page) {
+  public T getEntitiesForPage(int page) {
     // TODO: RestTemplate is synchron. Blockiert das die Anwendung oder läuft das in
     // einem separaten Thread?
     // TODO: Think about using WebClient. Its more modern and RestTemplate is only
@@ -75,8 +76,8 @@ class TMDBApi {
     Map<String, String> params = new HashMap<>();
     params.put("page", Integer.toString(page));
 
-    ResponseEntity<TMDBMovieResponse> response = restTemplate.exchange(urlTemplate, HttpMethod.GET, httpEntity,
-        TMDBMovieResponse.class, params);
+    ResponseEntity<T> response = restTemplate.exchange(urlTemplate, HttpMethod.GET, httpEntity,
+        this.responseClass, params);
     logger.info("Got response with status {} for page {}", response.getStatusCode().value(), page);
 
     return response.getBody();
@@ -84,5 +85,6 @@ class TMDBApi {
 }
 
 enum TMDBEntities {
-  MOVIE
+  MOVIE,
+  SERIES
 }
