@@ -4,8 +4,7 @@
     <title>Home</title>
   </head>
   <body>
-    <div layout:fragment="content" class="text-center mt-8">
-      <h1 class="mt-5"><em>Movie Rator</em></h1>
+    <div layout:fragment="content" class="mt-8">
       <form action="#" th:action="@{/search}" th:object="${searchTerm}" method="post" class="my-4 container" style="max-width: 350px">
         <div class="row my-2">
           <input type="text" th:field="*{value}" class="form-control" placeholder="Movie or series title" />
@@ -14,6 +13,10 @@
           <button type="submit" class="btn btn-primary">Search</button>
         </div>
       </form>
+      <h2>Results:</h2>
+      <div th:each="result : ${results}" class="result">
+        <h5 th:text="${result.title}"></h5>
+      </div>
     </div>
   </body>
 </html>

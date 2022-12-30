@@ -23,9 +23,8 @@ public class FetchAllMoviesAndSeries {
   @Autowired
   private TMDBAPIFactory tmdbApiFactory;
 
-  // TODO: Enable Cron loading
-  // @Scheduled(cron = "0 0 3 * * *")
-  @Scheduled(fixedRate = 24 * 60 * 60 * 1000)
+  @Scheduled(cron = "0 0 3 * * *")
+  // @Scheduled(fixedRate = 24 * 60 * 60 * 1000)
   public void fetchMovies() {
     logger.info("Fetching movies...");
     TMDBApi<TMDBMovieResponse, TMDBMovie> moviesApi = tmdbApiFactory.createForMovies();
@@ -40,8 +39,8 @@ public class FetchAllMoviesAndSeries {
     mediaEntityRepo.saveAll(movies);
   }
 
-  // @Scheduled(cron = "0 0 3 * * *")
-  @Scheduled(fixedRate = 24 * 60 * 60 * 1000)
+  @Scheduled(cron = "0 0 3 * * *")
+  // @Scheduled(fixedRate = 24 * 60 * 60 * 1000)
   public void fetchSeries() {
     logger.info("Fetching series...");
     TMDBApi<TMDBSeriesResponse, TMDBSeries> seriesApi = tmdbApiFactory.createForSeries();
