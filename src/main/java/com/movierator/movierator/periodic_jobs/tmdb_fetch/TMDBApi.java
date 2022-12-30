@@ -48,8 +48,10 @@ class TMDBApi<T extends TMDBResponse<U>, U> {
     // TODO: Do pagination in parallel with multiple threads - Would speed up
     // process significantly
 
+    
+    // TODO: Disable page maximum
     int totalPages = 1;
-    for (int page = 1; page <= totalPages; page++) {
+    for (int page = 1; page <= totalPages && page < 100; page++) {
       try {
         T response = this.getEntitiesForPage(page);
 
