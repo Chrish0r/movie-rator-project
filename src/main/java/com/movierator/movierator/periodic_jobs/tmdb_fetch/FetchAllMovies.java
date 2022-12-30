@@ -1,0 +1,54 @@
+package com.movierator.movierator.periodic_jobs.tmdb_fetch;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Component;
+
+import com.movierator.movierator.model.Movie;
+import com.movierator.movierator.repository.MovieRepository;
+
+@Component
+public class FetchAllMovies {
+  private static final Logger logger = LoggerFactory.getLogger(FetchAllMovies.class);
+
+  @Autowired
+  private MovieRepository movieRepo;
+
+  @Autowired
+  private TMDBAPIFactory tmdbApiFactory;
+
+  @Scheduled(fixedRate = 60000)
+  public void fetchMovies() {
+    logger.info("Fetching movies...");
+    int totalSavedMovies = 0;
+
+    // TODO: Do pagination in parallel with multiple threads - Would speed up
+    // process significantly
+
+    TMDBApi api = tmdbApiFactory.createForEntity(TMDBEntities.MOVIE);
+
+    int totalPages = 1;
+    for (int page = 1; page <= totalPages && page <= 10; page++) {
+      TMDBMovieResponse response = api.getEntitiesForPage(page);
+
+      totalPages = response.getTotal_pages();
+
+      List<Movie> movies = new ArrayList<>();
+      for (TMDBMovie tmdbMovie : response.getMovies()) {
+        // TODO: Create mapping iterator instead of saving it into temp variable
+        movies.add(new Movie(tmdbMovie.getTitle()));
+      }
+      // TODO: Update already existing movies instead of only appending
+      movieRepo.saveAll(movies);
+      totalSavedMovies += movies.size();
+      logger.info("Saved {} movies into database", movies.size());
+    }
+
+    logger.info("Saved in total {} movies into database", totalSavedMovies);
+  }
+}

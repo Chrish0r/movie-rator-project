@@ -6,12 +6,20 @@ import javax.persistence.Table;
 @Entity
 @Table(name = Movie.TABLE)
 public class Movie extends AbstractMediaEntity {
-	
 	private static final long serialVersionUID = 8788023230378376597L;
 	public static final String TABLE = "movies";
 
-	public Movie() {
-		
+	public Movie(String name) {
+		this.name = name;
 	}
 
+	private String name;
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
 }
