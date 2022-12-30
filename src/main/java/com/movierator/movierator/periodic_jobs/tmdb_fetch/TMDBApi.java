@@ -14,7 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
-class TMDBApi {
+class TMDBApi<T extends TMDBResponse<U>, U> {
   private static final Logger logger = LoggerFactory.getLogger(TMDBApi.class);
 
   private HttpEntity<String> httpEntity;
@@ -23,10 +23,12 @@ class TMDBApi {
   private RestTemplate restTemplate;
 
   private TMDBConfig config;
+  private Class<T> responseClass;
 
-  TMDBApi(RestTemplate restTemplate, TMDBConfig tmdbConfig, String urlEndpoint) {
+  TMDBApi(RestTemplate restTemplate, TMDBConfig tmdbConfig, String urlEndpoint, Class<T> responseClass) {
     this.restTemplate = restTemplate;
     this.config = tmdbConfig;
+    this.responseClass = responseClass;
 
     HttpHeaders headers = new HttpHeaders();
     headers.add("Authorization", "Bearer " + config.getApiToken());
@@ -40,30 +42,30 @@ class TMDBApi {
         .toUriString();
   }
 
-  public List<TMDBMovie> getAllEntities() {
-    List<TMDBMovie> movies = new ArrayList<>();
+  public List<U> getAllEntities() {
+    List<U> entities = new ArrayList<>();
+
+    // TODO: Do pagination in parallel with multiple threads - Would speed up process significantly
 
     int totalPages = 1;
-    for (int page = 1; page <= totalPages && page <= 10; page++) {
-      TMDBResponse response = this.getEntitiesForPage(page);
+    for (int page = 1; page <= totalPages; page++) {
+      T response = this.getEntitiesForPage(page);
 
-      totalPages = response.getTotal_pages();
+      totalPages = response.total_pages;
 
-      movies.addAll(response.getResults());
+      for (U resultEntity : response.results) {
+        entities.add(resultEntity);
+      }
     }
+    
+    return entities;
   }
 
-  private TMDBResponse getEntitiesForPage(int page) {
-    // TODO: RestTemplate is synchron. Blockiert das die Anwendung oder läuft das in
-    // einem separaten Thread?
-    // TODO: Think about using WebClient. Its more modern and RestTemplate is only
-    // in maintainance mode
-
+  private T getEntitiesForPage(int page) {
     Map<String, String> params = new HashMap<>();
     params.put("page", Integer.toString(page));
 
-    ResponseEntity<TMDBResponse> response = restTemplate.exchange(urlTemplate, HttpMethod.GET, httpEntity,
-        TMDBResponse.class, params);
+    ResponseEntity<T> response = restTemplate.exchange(urlTemplate, HttpMethod.GET, httpEntity, this.responseClass, params);
     logger.info("Got response with status {} for page {}", response.getStatusCode().value(), page);
 
     return response.getBody();
