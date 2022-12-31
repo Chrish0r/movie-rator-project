@@ -6,38 +6,37 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.movierator.movierator.controller.formObjects.SearchResult;
 import com.movierator.movierator.controller.formObjects.SearchTerm;
 import com.movierator.movierator.model.Media;
-import com.movierator.movierator.repository.MediaEntityRepository;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import com.movierator.movierator.repository.MediaRepository;
 
 
 @Controller
-public class MediaEntityController {
-  private MediaEntityRepository mediaEntityRepository;
+public class MediaController {
+  private MediaRepository mediaEntityRepository;
   
-  public MediaEntityController(MediaEntityRepository mediaEntityRepository) {
+  public MediaController(MediaRepository mediaEntityRepository) {
     this.mediaEntityRepository = mediaEntityRepository;
   }
   
-  @PostMapping("/search")
-  public String searchMedia(@ModelAttribute SearchTerm searchTerm, Model model) {
-    model.addAttribute("searchTerm", searchTerm);
-    
-    List<Media> foundMedia = this.mediaEntityRepository.findByNameContaining(searchTerm.getValue());
+  @GetMapping("/search")
+  public String searchMedia(@RequestParam(name = "searchTerm") String searchTermRaw, Model model) {
+    List<Media> foundMedia = this.mediaEntityRepository.findByNameContaining(searchTermRaw);
     List<SearchResult> results = new ArrayList<>(foundMedia.size());
     
     for (Media media : foundMedia) {
       results.add(new SearchResult(media.getId(), media.getName()));
     }
     model.addAttribute("results", results);
+
+    // To show the search term on the result page it has to be passed as attribute
+    SearchTerm searchTerm = new SearchTerm(searchTermRaw);
+    model.addAttribute("searchTerm", searchTerm);
 
     return "search-result";
   }
@@ -47,11 +46,10 @@ public class MediaEntityController {
     Optional<Media> media = this.mediaEntityRepository.findById(id);
     
     if(media.isEmpty()) {
-      return "redirect:not-found";
+      return "media-not-found";
     }
     
     model.addAttribute("media", media.get());
     return "media-detail";
   }
-  
 }

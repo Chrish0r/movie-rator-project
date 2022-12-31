@@ -6,9 +6,9 @@
   <body>
     <div layout:fragment="content" class="text-center mt-8">
       <h1 class="mt-5"><em>Movie Rator</em></h1>
-      <form action="#" th:action="@{/search}" th:object="${searchTerm}" method="post" class="my-4 container" style="max-width: 350px">
+      <form action="#" th:action="@{/search}" method="GET" class="my-4 container" style="max-width: 350px">
         <div class="row my-2">
-          <input type="text" th:field="*{value}" class="form-control" placeholder="Movie or series title" />
+          <input type="text" name="searchTerm" th:value="${searchTerm}" class="form-control" placeholder="Movie or series title" />
         </div>
         <div class="row my-2">
           <button type="submit" class="btn btn-primary">Search</button>

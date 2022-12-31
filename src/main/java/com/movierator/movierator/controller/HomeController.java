@@ -12,10 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.movierator.movierator.controller.formObjects.SearchTerm;
 import com.movierator.movierator.model.Admin;
 import com.movierator.movierator.model.Moderator;
 import com.movierator.movierator.model.RegularUser;
@@ -47,8 +45,7 @@ public class HomeController {
 	RegularUserRepository regularUserRepository;
 	
 	@RequestMapping(value={"/", "/start"})
-	public String showIndexView(Model model) {
-		model.addAttribute("searchTerm", new SearchTerm());
+	public String showIndexView() {
 		return "index";
 	}
 

@@ -3,6 +3,10 @@ package com.movierator.movierator.controller.formObjects;
 public class SearchTerm {
   private String value;
 
+  public SearchTerm(String value) {
+    this.value = value;
+  }
+
   public String getValue() {
     return value;
   }

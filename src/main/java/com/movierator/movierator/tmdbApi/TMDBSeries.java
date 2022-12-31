@@ -1,4 +1,4 @@
-package com.movierator.movierator.periodic_jobs.tmdb_fetch;
+package com.movierator.movierator.tmdbApi;
 
 public class TMDBSeries {
   public long id;

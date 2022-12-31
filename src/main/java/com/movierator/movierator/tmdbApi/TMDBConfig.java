@@ -1,4 +1,4 @@
-package com.movierator.movierator.periodic_jobs.tmdb_fetch;
+package com.movierator.movierator.tmdbApi;
 
 import javax.validation.constraints.NotBlank;
 
