@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.movierator.movierator.controller.formObjects.SearchResult;
 import com.movierator.movierator.controller.formObjects.SearchTerm;
-import com.movierator.movierator.model.MediaEntity;
+import com.movierator.movierator.model.Media;
 import com.movierator.movierator.repository.MediaEntityRepository;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -31,10 +31,10 @@ public class MediaEntityController {
   public String searchMedia(@ModelAttribute SearchTerm searchTerm, Model model) {
     model.addAttribute("searchTerm", searchTerm);
     
-    List<MediaEntity> foundMedia = this.mediaEntityRepository.findByNameContaining(searchTerm.getValue());
+    List<Media> foundMedia = this.mediaEntityRepository.findByNameContaining(searchTerm.getValue());
     List<SearchResult> results = new ArrayList<>(foundMedia.size());
     
-    for (MediaEntity media : foundMedia) {
+    for (Media media : foundMedia) {
       results.add(new SearchResult(media.getId(), media.getName()));
     }
     model.addAttribute("results", results);
@@ -44,7 +44,7 @@ public class MediaEntityController {
 
   @GetMapping(value="/media/{id}")
   public String showMedia(@PathVariable long id, Model model) {
-    Optional<MediaEntity> media = this.mediaEntityRepository.findById(id);
+    Optional<Media> media = this.mediaEntityRepository.findById(id);
     
     if(media.isEmpty()) {
       return "redirect:not-found";

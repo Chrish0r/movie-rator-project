@@ -9,8 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import com.movierator.movierator.model.MediaEntity;
-import com.movierator.movierator.model.MediaEntityType;
+import com.movierator.movierator.model.Media;
+import com.movierator.movierator.model.MediaType;
 import com.movierator.movierator.repository.MediaEntityRepository;
 
 @Component
@@ -30,9 +30,9 @@ public class FetchAllMoviesAndSeries {
     TMDBApi<TMDBMovieResponse, TMDBMovie> moviesApi = tmdbApiFactory.createForMovies();
 
     List<TMDBMovie> tmdbMovies = moviesApi.getAllEntities();
-    List<MediaEntity> movies = new ArrayList<>();
+    List<Media> movies = new ArrayList<>();
     for (TMDBMovie tmdbMovie : tmdbMovies) {
-      movies.add(new MediaEntity(tmdbMovie.id, MediaEntityType.MOVIE, tmdbMovie.title));
+      movies.add(new Media(tmdbMovie.id, MediaType.MOVIE, tmdbMovie.title));
     }
 
     logger.info("Saved {} movies into database", movies.size());
@@ -46,9 +46,9 @@ public class FetchAllMoviesAndSeries {
     TMDBApi<TMDBSeriesResponse, TMDBSeries> seriesApi = tmdbApiFactory.createForSeries();
 
     List<TMDBSeries> tmdbSeries = seriesApi.getAllEntities();
-    List<MediaEntity> mediaEntities = new ArrayList<>();
+    List<Media> mediaEntities = new ArrayList<>();
     for (TMDBSeries series : tmdbSeries) {
-      mediaEntities.add(new MediaEntity(series.id, MediaEntityType.SERIES, series.name));
+      mediaEntities.add(new Media(series.id, MediaType.SERIES, series.name));
     }
 
     logger.info("Saved {} series into database", mediaEntities.size());

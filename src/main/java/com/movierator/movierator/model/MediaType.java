@@ -1,12 +1,12 @@
 package com.movierator.movierator.model;
 
-public enum MediaEntityType {
+public enum MediaType {
 	MOVIE("MOVIE"),
 	SERIES("SERIES");
 
 	private String type;
 
-	private MediaEntityType(String type) {
+	private MediaType(String type) {
 		this.type = type;
 	}
 
