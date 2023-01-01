@@ -5,13 +5,12 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.repository.Repository;
-import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Component;
 
 import com.movierator.movierator.model.Media;
+import com.movierator.movierator.tmdbApi.TMDBApi;
 import com.movierator.movierator.tmdbApi.TMDBApiFactory;
 import com.movierator.movierator.tmdbApi.TMDBEntityToMediaMapper;
-import com.movierator.movierator.tmdbApi.TMDBApi;
 import com.movierator.movierator.tmdbApi.TMDBMovie;
 import com.movierator.movierator.tmdbApi.TMDBMovieResponse;
 import com.movierator.movierator.tmdbApi.TMDBSeries;

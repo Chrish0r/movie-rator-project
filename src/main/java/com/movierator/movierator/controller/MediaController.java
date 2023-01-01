@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.movierator.movierator.controller.formObjects.SearchResult;
+import com.movierator.movierator.controller.formObjects.ActorSearchResult;
 import com.movierator.movierator.controller.formObjects.SearchTerm;
 import com.movierator.movierator.model.Media;
 import com.movierator.movierator.repository.MediaRepository;
@@ -27,10 +27,10 @@ public class MediaController {
   @GetMapping("/search")
   public String searchMedia(@RequestParam(name = "searchTerm") String searchTermRaw, Model model) {
     List<Media> foundMedia = this.mediaEntityRepository.findByNameContaining(searchTermRaw);
-    List<SearchResult> results = new ArrayList<>(foundMedia.size());
+    List<ActorSearchResult> results = new ArrayList<>(foundMedia.size());
     
     for (Media media : foundMedia) {
-      results.add(new SearchResult(media.getId(), media.getName()));
+      results.add(new ActorSearchResult(media.getId(), media.getName()));
     }
     model.addAttribute("results", results);
 

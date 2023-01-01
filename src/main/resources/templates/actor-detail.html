@@ -1,0 +1,11 @@
+<!DOCTYPE html>
+<html layout:decorate="~{layouts/default-layout}">
+  <head>
+    <title th:text="${actor.name}"></title>
+  </head>
+  <body>
+    <div layout:fragment="content" class="text-center mt-8">
+      <h1 class="mt-5" th:text="${actor.name}"></h1>
+    </div>
+  </body>
+</html>

@@ -6,14 +6,42 @@
   <body>
     <div layout:fragment="content" class="text-center mt-8">
       <h1 class="mt-5"><em>Movie Rator</em></h1>
-      <form action="#" th:action="@{/search}" method="GET" class="my-4 container" style="max-width: 350px">
-        <div class="row my-2">
-          <input type="text" name="searchTerm" th:value="${searchTerm}" class="form-control" placeholder="Movie or series title" />
+      <div class="container text-start my-4" style="max-width: 350px">
+        <div>
+          <h4>Search Movie</h4>
+          <form action="#" th:action="@{/search}" method="GET">
+            <div class="row my-2">
+              <input
+                type="text"
+                name="searchTerm"
+                th:value="${searchTerm}"
+                class="form-control"
+                placeholder="Movie or series title"
+              />
+            </div>
+            <div class="row my-2">
+              <button type="submit" class="btn btn-primary">Search</button>
+            </div>
+          </form>
         </div>
-        <div class="row my-2">
-          <button type="submit" class="btn btn-primary">Search</button>
+        <div class="mt-4">
+          <h4>Search Actor</h4>
+          <form action="#" th:action="@{/search-actor}" method="GET">
+            <div class="row my-2">
+              <input
+                type="text"
+                name="searchTerm"
+                th:value="${searchTerm}"
+                class="form-control"
+                placeholder="Actor name"
+              />
+            </div>
+            <div class="row my-2">
+              <button type="submit" class="btn btn-primary">Search</button>
+            </div>
+          </form>
         </div>
-      </form>
+      </div>
     </div>
   </body>
 </html>
