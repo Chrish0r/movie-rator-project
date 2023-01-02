@@ -29,6 +29,9 @@ public class NewsletterController {
     }
 
     this.newsletterSubscriberRepository.save(newsletterSubscriber);
+
+    // TODO: Send newsletter confirmation + maybe additional opt in
+
     return "newsletter/subscribe-success";
   }
 }
