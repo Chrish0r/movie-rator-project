@@ -4,7 +4,7 @@
     <title>Home</title>
   </head>
   <body>
-    <div layout:fragment="content" class="text-center mt-8">
+    <div layout:fragment="content" class="text-center">
       <h1 class="mt-5"><em>Movie Rator</em></h1>
       <div class="container text-start my-4" style="max-width: 350px">
         <div>
@@ -43,6 +43,27 @@
             </div>
           </form>
         </div>
+      </div>
+      <div class="container mt-5 text-start">
+        <div class="row">
+          <h4>Subscribe to Newsletter</h4>
+        </div>
+        <form action="#" th:action="@{/subscribe-to-newsletter}" th:object="${newsletterSubscribe}" method="post">
+          <div class="row">
+            <div class="col-3">
+              <input
+                type="email"
+                th:field="*{email}"
+                required
+                class="form-control"
+                th:errorclass="is-invalid"
+                placeholder="Email Address"
+              />
+              <div th:if="${#fields.hasErrors('email')}" class="invalid-feedback" th:errors="*{email}">Test</div>
+            </div>
+            <div class="col-7"><button class="btn btn-secondary">Subscribe</button></div>
+          </div>
+        </form>
       </div>
     </div>
   </body>

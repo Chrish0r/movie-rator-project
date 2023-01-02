@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Optional;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,10 +13,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.movierator.movierator.model.Admin;
 import com.movierator.movierator.model.Moderator;
+import com.movierator.movierator.model.NewsletterSubscriber;
 import com.movierator.movierator.model.RegularUser;
 import com.movierator.movierator.model.User;
 import com.movierator.movierator.repository.AdminRepository;
@@ -45,7 +48,7 @@ public class HomeController {
 	RegularUserRepository regularUserRepository;
 	
 	@RequestMapping(value={"/", "/start"})
-	public String showIndexView() {
+	public String showIndexView(@ModelAttribute("newsletterSubscribe") NewsletterSubscriber newsletterSubscriber) {
 		return "index";
 	}
 
