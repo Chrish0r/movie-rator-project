@@ -9,12 +9,13 @@
       <div class="container text-start my-4" style="max-width: 350px">
         <div>
           <h4>Search Movie</h4>
-          <form action="#" th:action="@{/search}" method="GET">
+          <form action="#" th:action="@{/search-media}" method="GET">
             <div class="row my-2">
               <input
                 type="text"
                 name="searchTerm"
                 th:value="${searchTerm}"
+                required
                 class="form-control"
                 placeholder="Movie or series title"
               />
@@ -31,6 +32,7 @@
               <input
                 type="text"
                 name="searchTerm"
+                required
                 th:value="${searchTerm}"
                 class="form-control"
                 placeholder="Actor name"
