@@ -11,6 +11,9 @@
         <div class="col-auto">
           <h5 th:text="${movie.title}"></h5>
         </div>
+        <div class="col-auto">
+          <p th:text="'Average Rating: ' + ${movie.avgRating}"></h5>
+        </div>
         <div class="col">
           <a th:href="${'/media/' + movie.id}">Go to</a>
         </div>
