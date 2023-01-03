@@ -2,9 +2,11 @@ package com.movierator.movierator.model;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.Column;
+import javax.persistence.Convert;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -17,6 +19,8 @@ import javax.persistence.Table;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
+
+import com.movierator.movierator.service.AttributeEncryptor;
 
 /**
  * This class is representing the entity {@link User} with its various attributes.
@@ -50,6 +54,10 @@ public class User implements Serializable {
 	private String password;
 	
 	private Integer active;
+
+	@Column(columnDefinition = "varchar(255)")
+	@Convert(converter = AttributeEncryptor.class)
+	private String birthday;
 
 	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(
@@ -109,5 +117,13 @@ public class User implements Serializable {
 
 	public void setMyAuthorities(List<Authority> myAuthorities) {
 		this.myAuthorities = myAuthorities;
+	}
+
+	public String getBirthday() {
+		return birthday;
+	}
+
+	public void setBirthday(String birthday) {
+		this.birthday = birthday;
 	}
 }

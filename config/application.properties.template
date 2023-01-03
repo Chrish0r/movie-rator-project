@@ -9,6 +9,8 @@ hibernate.auto_quote_keyword=true
 tmdb.url=https://api.themoviedb.org/3
 tmdb.api_token=
 
+user_sensible_data_aes_encryption_key=
+
 spring.mail.host=
 spring.mail.port=
 spring.mail.username=

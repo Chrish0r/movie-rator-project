@@ -30,6 +30,7 @@ public class MyUserDetails implements UserDetails {
 		this.password = user.getPassword();
 		logger.info("password of the user is = " + password);
 		logger.info("userName of the user is = " + this.userName);
+		logger.info("birthday of the user is = " + user.getBirthday());
 		this.active = (user.getActive() > 0 ? true : false);
 		this.authorities = new ArrayList<>();
 		
