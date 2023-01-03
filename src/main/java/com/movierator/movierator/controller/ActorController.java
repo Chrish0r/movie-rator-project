@@ -14,13 +14,17 @@ import com.movierator.movierator.controller.formObjects.ActorSearchResult;
 import com.movierator.movierator.controller.formObjects.SearchTerm;
 import com.movierator.movierator.model.Actor;
 import com.movierator.movierator.repository.ActorRepository;
+import com.movierator.movierator.tmdbApi.TMDBActorApi;
+import com.movierator.movierator.tmdbApi.TMDBApiFactory;
 
 @Controller
 public class ActorController {
   private ActorRepository actorRepository;
+  private TMDBActorApi tmdbActorApi;
 
-  public ActorController(ActorRepository actorRepository) {
+  public ActorController(ActorRepository actorRepository, TMDBApiFactory tmdbApiFactory) {
     this.actorRepository = actorRepository;
+    this.tmdbActorApi = tmdbApiFactory.createForActors();
   }
 
   @GetMapping("/search-actor")
@@ -49,6 +53,8 @@ public class ActorController {
     }
     
     model.addAttribute("actor", actor.get());
+    model.addAttribute("movies",  tmdbActorApi.getMovieCredits(id));
+
     return "actor-detail";
   }
 }

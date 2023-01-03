@@ -13,8 +13,6 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
 public class TMDBApi<T extends TMDBResponse<U>, U> {
-  private static final Logger logger = LoggerFactory.getLogger(TMDBApi.class);
-
   private String entityEndpoint;
   private HttpEntity<String> httpEntity;
   private RestTemplate restTemplate;
