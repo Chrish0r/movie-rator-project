@@ -13,6 +13,9 @@ import org.springframework.stereotype.Service;
 
 import com.movierator.movierator.model.NewsletterSubscriber;
 import com.movierator.movierator.repository.NewsletterSubscriberRepository;
+import com.movierator.movierator.tmdbApi.TMDBApiFactory;
+import com.movierator.movierator.tmdbApi.TMDBMovie;
+import com.movierator.movierator.tmdbApi.TMDBMovieApi;
 
 @Service
 public class NewsletterSender {
@@ -20,12 +23,16 @@ public class NewsletterSender {
 
   @Autowired
   private NewsletterSubscriberRepository newsletterSubscriberRepository;
-
   @Autowired
   private MailSender emailSender;
+  private TMDBMovieApi tmdbMovieApi;
 
-  @Scheduled(fixedRate = 60000) // TODO: Add Cron expression to send newsletter
-  // weekly
+  public NewsletterSender(TMDBApiFactory tmdbApiFactory) {
+    tmdbMovieApi = tmdbApiFactory.createForMovies();
+  }
+
+  // @Scheduled(fixedRate = 60000) // For testing purposes
+  @Scheduled(cron = "0 0 19 * * MON") // Every monday at 7 PM
   public void sendNewsletter() {
     logger.info("Sending newsletter...");
     Iterable<NewsletterSubscriber> subscribers = newsletterSubscriberRepository.findAll();
@@ -50,8 +57,19 @@ public class NewsletterSender {
     SimpleMailMessage message = new SimpleMailMessage();
     message.setFrom("info@movie-rator.de");
     message.setSubject("Newsletter");
-    message.setText("Lorem ipsum");
+    message.setText(getNewsletterContent());
 
     return message;
+  }
+
+  private String getNewsletterContent() {
+    List<TMDBMovie> upcomingMovies = tmdbMovieApi.getUpcoming();
+
+    String content = "Upcoming movies: \n";
+    for (TMDBMovie tmdbMovie : upcomingMovies) {
+      content += String.format("%s on %s\n", tmdbMovie.title, tmdbMovie.release_date);
+    }
+
+    return content;
   }
 }

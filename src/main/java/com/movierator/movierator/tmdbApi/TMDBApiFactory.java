@@ -13,9 +13,9 @@ public class TMDBApiFactory {
   @Autowired
   private TMDBConfig config;
 
-  public TMDBApi<TMDBMovieResponse, TMDBMovie> createForMovies() {
+  public TMDBMovieApi createForMovies() {
     RestTemplate restTemplate = restTemplateBuilder.build();
-    return new TMDBApi<TMDBMovieResponse, TMDBMovie>(restTemplate, config, "/movie", TMDBMovieResponse.class, TMDBMovie.class);
+    return new TMDBMovieApi(restTemplate, config);
   }
 
   public TMDBApi<TMDBSeriesResponse, TMDBSeries> createForSeries() {
