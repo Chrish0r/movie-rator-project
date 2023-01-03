@@ -47,7 +47,8 @@ public class HomeController {
 	@Autowired
 	RegularUserRepository regularUserRepository;
 	
-	@RequestMapping("/start")
+
+	@RequestMapping(value={"/", "/start"})
 	public String showIndexView(@ModelAttribute("newsletterSubscribe") NewsletterSubscriber newsletterSubscriber) {
 		return "index";
 	}
