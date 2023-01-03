@@ -22,6 +22,7 @@ import com.movierator.movierator.model.User;
 @Component
 public class UserRestAPITester {
 	
+	// represents client i.e., represents client request
 	private final RestTemplate restTemplate;
 	
 	@Autowired

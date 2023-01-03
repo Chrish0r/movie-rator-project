@@ -19,11 +19,10 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 
 /**
- * This class is representing the entitiy {@link User} with its various attributes.
+ * This class is representing the entity {@link User} with its various attributes.
  * The user also represents the credential entity regarding the log-in, i.e. authorization process.
  * 
  * @author Przemyslaw Christof Gadek
- *
  */
 
 @Entity

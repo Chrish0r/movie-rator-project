@@ -44,12 +44,12 @@ public class HomeController {
 	@Autowired
 	RegularUserRepository regularUserRepository;
 	
-	@RequestMapping(value={"/", "/start"})
+	@RequestMapping("/start")
 	public String showIndexView() {
 		return "index";
 	}
 
-	@RequestMapping ("/home")
+	@RequestMapping (value={"/", "/home"})
 	public String home(HttpServletRequest request, Principal principal) {
 		
 		@SuppressWarnings("unchecked")
