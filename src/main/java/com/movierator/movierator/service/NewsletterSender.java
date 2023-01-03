@@ -23,8 +23,8 @@ public class NewsletterSender {
   @Autowired
   private NewsletterSubscriberRepository newsletterSubscriberRepository;
 
-  @Autowired
-  private JavaMailSender emailSender;
+//  @Autowired
+//  private JavaMailSender emailSender;
 
   @Scheduled(fixedRate = 60000) // TODO: Add Cron expression to send newsletter weekly
   public void sendNewsletter() {
@@ -42,7 +42,7 @@ public class NewsletterSender {
     
     SimpleMailMessage message = getNewsletterMessage();
     message.setTo((recipients.toArray(new String[0])));
-    emailSender.send(message);
+//    emailSender.send(message);
 
     logger.info(String.format("Sent newsletter to %d subscribers", recipients.size()));
   }
