@@ -10,18 +10,22 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.movierator.movierator.controller.formObjects.MediaDetail;
 import com.movierator.movierator.controller.formObjects.MediaSearchResult;
 import com.movierator.movierator.controller.formObjects.SearchTerm;
 import com.movierator.movierator.model.Media;
+import com.movierator.movierator.repository.MediaRatingRepository;
 import com.movierator.movierator.repository.MediaRepository;
 
 
 @Controller
 public class MediaController {
   private MediaRepository mediaEntityRepository;
+  private MediaRatingRepository mediaRatingRepository;
   
-  public MediaController(MediaRepository mediaEntityRepository) {
+  public MediaController(MediaRepository mediaEntityRepository, MediaRatingRepository mediaRatingRepository) {
     this.mediaEntityRepository = mediaEntityRepository;
+    this.mediaRatingRepository = mediaRatingRepository;
   }
   
   @GetMapping("/search-media")
@@ -49,7 +53,9 @@ public class MediaController {
       return "media-not-found";
     }
     
-    model.addAttribute("media", media.get());
+    Float avgRating = mediaRatingRepository.getAverageRatingByMediaId(id);
+    MediaDetail mediaDetail = new MediaDetail(media.get().getId(), media.get().getType(), media.get().getName(), avgRating);
+    model.addAttribute("media", mediaDetail);
     return "media-detail";
   }
 }

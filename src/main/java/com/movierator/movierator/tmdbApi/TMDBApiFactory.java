@@ -13,9 +13,9 @@ public class TMDBApiFactory {
   @Autowired
   private TMDBConfig config;
 
-  public TMDBApi<TMDBMovieResponse, TMDBMovie> createForMovies() {
+  public TMDBMovieApi createForMovies() {
     RestTemplate restTemplate = restTemplateBuilder.build();
-    return new TMDBApi<TMDBMovieResponse, TMDBMovie>(restTemplate, config, "/movie", TMDBMovieResponse.class, TMDBMovie.class);
+    return new TMDBMovieApi(restTemplate, config);
   }
 
   public TMDBApi<TMDBSeriesResponse, TMDBSeries> createForSeries() {
@@ -23,8 +23,8 @@ public class TMDBApiFactory {
     return new TMDBApi<TMDBSeriesResponse, TMDBSeries>(restTemplate, config, "/tv", TMDBSeriesResponse.class, TMDBSeries.class);
   }
 
-  public TMDBApi<TMDBActorResponse, TMDBActor> createForActors() {
+  public TMDBActorApi createForActors() {
     RestTemplate restTemplate = restTemplateBuilder.build();
-    return new TMDBApi<TMDBActorResponse, TMDBActor>(restTemplate, config, "/person", TMDBActorResponse.class, TMDBActor.class);
+    return new TMDBActorApi(restTemplate, config);
   }
 }

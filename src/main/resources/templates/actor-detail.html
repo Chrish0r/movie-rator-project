@@ -4,8 +4,20 @@
     <title th:text="${actor.name}"></title>
   </head>
   <body>
-    <div layout:fragment="content" class="text-center mt-8">
+    <div layout:fragment="content" class="mt-8">
       <h1 class="mt-5" th:text="${actor.name}"></h1>
+      <h2>Movies:</h2>
+      <div th:each="movie : ${movies}" class="row result">
+        <div class="col-auto">
+          <h5 th:text="${movie.title}"></h5>
+        </div>
+        <div class="col-auto">
+          <p th:text="'Average Rating: ' + ${movie.avgRating}"></h5>
+        </div>
+        <div class="col">
+          <a th:href="${'/media/' + movie.id}">Go to</a>
+        </div>
+      </div>
     </div>
   </body>
 </html>

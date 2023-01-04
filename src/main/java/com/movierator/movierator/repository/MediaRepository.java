@@ -16,6 +16,11 @@ import com.movierator.movierator.tmdbApi.TMDBMovieResponse;
 import com.movierator.movierator.tmdbApi.TMDBSeries;
 import com.movierator.movierator.tmdbApi.TMDBSeriesResponse;
 
+/* 
+ * I decided against fetching all movies from TMDB and storing them in the database,
+ * because it is much more efficient to query TMDB directly.
+ */
+
 @Component
 public class MediaRepository implements Repository<Media, Long> {
   private TMDBApi<TMDBMovieResponse, TMDBMovie> movieApi;

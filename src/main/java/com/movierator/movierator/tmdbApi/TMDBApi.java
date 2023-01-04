@@ -13,8 +13,6 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
 public class TMDBApi<T extends TMDBResponse<U>, U> {
-  private static final Logger logger = LoggerFactory.getLogger(TMDBApi.class);
-
   private String entityEndpoint;
   private HttpEntity<String> httpEntity;
   private RestTemplate restTemplate;
@@ -67,11 +65,27 @@ public class TMDBApi<T extends TMDBResponse<U>, U> {
 
     try {
       ResponseEntity<U> response = restTemplate.exchange(urlTemplate, HttpMethod.GET, httpEntity,
-    this.tmdbResponseEntityClass);
+          this.tmdbResponseEntityClass);
 
-    return Optional.of(response.getBody());
+      return Optional.of(response.getBody());
     } catch (HttpClientErrorException e) {
       return Optional.empty();
     }
+  }
+
+  protected HttpEntity<String> getHttpEntity() {
+    return httpEntity;
+  }
+
+  protected RestTemplate getRestTemplate() {
+    return restTemplate;
+  }
+
+  protected TMDBConfig geTmdbConfig() {
+    return config;
+  }
+
+  protected String getEntityEndpoint() {
+    return entityEndpoint;
   }
 }
