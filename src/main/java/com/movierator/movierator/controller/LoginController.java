@@ -11,18 +11,16 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 @Controller
 public class LoginController {
-	
 
-	
 	@GetMapping("/login")
 	public String showLoginForm(Model model) {
-		
+
 		return "login";
 	}
-	
-	@RequestMapping ( method=RequestMethod.GET, value="/prelogout")
+
+	@RequestMapping(method = RequestMethod.GET, value = "/prelogout")
 	public String showPreLogout(HttpServletRequest request, HttpServletResponse response) {
-	
+
 		return "prelogout";
 	}
 
