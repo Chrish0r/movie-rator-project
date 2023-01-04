@@ -34,6 +34,10 @@ public class AttributeEncryptor implements AttributeConverter<String, String> {
 
   @Override
   public String convertToDatabaseColumn(String attribute) {
+    if(attribute == null) {
+      return null;
+    }
+
     try {
       cipher.init(Cipher.ENCRYPT_MODE, key);
       return Base64.getEncoder().encodeToString(cipher.doFinal(attribute.getBytes()));
@@ -44,6 +48,10 @@ public class AttributeEncryptor implements AttributeConverter<String, String> {
 
   @Override
   public String convertToEntityAttribute(String dbData) {
+    if(dbData == null) {
+      return null;
+    }
+    
     try {
       cipher.init(Cipher.DECRYPT_MODE, key);
       return new String(cipher.doFinal(Base64.getDecoder().decode(dbData)));

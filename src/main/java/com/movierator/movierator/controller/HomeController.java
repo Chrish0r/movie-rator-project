@@ -97,7 +97,6 @@ public class HomeController {
 			return "regular-user";
 		}
 
-		logger.warn("An error occured while trying to load the http request based on " + (principal).getName());
-		return "/error";
+		return "index";
 	}
 }
