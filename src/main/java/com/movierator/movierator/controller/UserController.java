@@ -46,8 +46,6 @@ public class UserController {
 	@Autowired
 	RegularUserRepository regularUserRepository;
 
-	// TODO: public String showPaginatedUsers() -> might need for admin
-
 	@RequestMapping("/user/add")
 	public ModelAndView showAddRegularUserForm() {
 

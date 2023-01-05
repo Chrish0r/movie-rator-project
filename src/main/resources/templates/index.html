@@ -1,70 +1,112 @@
 <!DOCTYPE html>
 <html layout:decorate="~{layouts/default-layout}">
-  <head>
-    <title>Home</title>
-  </head>
-  <body>
-    <div layout:fragment="content" class="text-center">
-      <h1 class="mt-5"><em>Movie Rator</em></h1>
-      <div class="container text-start my-4" style="max-width: 350px">
-        <div>
-          <h4>Search Movie</h4>
-          <form action="#" th:action="@{/search-media}" method="GET">
-            <div class="row my-2">
-              <input
-                type="text"
-                name="searchTerm"
-                th:value="${searchTerm}"
-                required
-                class="form-control"
-                placeholder="Movie or series title"
-              />
-            </div>
-            <div class="row my-2">
-              <button type="submit" class="btn btn-primary">Search</button>
-            </div>
-          </form>
-        </div>
-        <div class="mt-4">
-          <h4>Search Actor</h4>
-          <form action="#" th:action="@{/search-actor}" method="GET">
-            <div class="row my-2">
-              <input
-                type="text"
-                name="searchTerm"
-                required
-                th:value="${searchTerm}"
-                class="form-control"
-                placeholder="Actor name"
-              />
-            </div>
-            <div class="row my-2">
-              <button type="submit" class="btn btn-primary">Search</button>
-            </div>
-          </form>
-        </div>
-      </div>
-      <div class="container mt-5 text-start">
-        <div class="row">
-          <h4>Subscribe to Newsletter</h4>
-        </div>
-        <form action="#" th:action="@{/subscribe-to-newsletter}" th:object="${newsletterSubscribe}" method="post">
-          <div class="row">
-            <div class="col-3">
-              <input
-                type="email"
-                th:field="*{email}"
-                required
-                class="form-control"
-                th:errorclass="is-invalid"
-                placeholder="Email Address"
-              />
-              <div th:if="${#fields.hasErrors('email')}" class="invalid-feedback" th:errors="*{email}">Test</div>
-            </div>
-            <div class="col-7"><button class="btn btn-secondary">Subscribe</button></div>
-          </div>
-        </form>
-      </div>
-    </div>
-  </body>
+<head>
+<title>Home</title>
+</head>
+<body>
+
+	<div sec:authorize=”isAuthenticated()”>
+		<div layout:fragment="header" sec:authorize="hasRole('ADMIN')">
+			<h4>Logged in as an admin</h4>
+		</div>
+
+		<div layout:fragment="header" sec:authorize="hasRole('MODERATOR')">
+			<h4>Logged in as moderator</h4>
+		</div>
+
+		<div layout:fragment="header"
+			sec:authorize="hasAuthority('REGULAR USER')">
+			<h4>Logged in as regular user"</h4>
+
+			<nav class="navbar navbar-expand-lg navbar-light bg-light">
+				<div class="collapse navbar-collapse" id="navbarSupportedContent">
+					<ul class="navbar-nav mr-auto">
+						<li class="nav-item active"><a class="nav-link"
+							th:href="@{/}">Home</a></li>
+
+						<li><a class="nav-link" th:href="@{/update/{id}}">Update
+								Account</a></li>
+
+						<li class="nav-item dropdown"><a
+							class="nav-link dropdown-toggle" href="#" id="navbarDropdown"
+							role="button" data-toggle="dropdown" aria-haspopup="true"
+							aria-expanded="true"> Account </a>
+							<div class="dropdown-menu" aria-labelledby="navbarDropdown">
+								<a class="dropdown-item" href="@{/update/{id}}">Update Email</a> 
+							<div class="dropdown-divider"></div>
+								<a class="dropdown-item" href="#">Something else here</a>
+							</div></li>
+						<li><a class="nav-link" th:href="@{/logout}">Logout</a></li>
+
+					</ul>
+				</div>
+			</nav>
+		</div>
+
+	</div>
+
+	<!-- View for not logged in user does not work + not ready yet  - TODO: fix 
+
+	<div layout:fragment="header" sec:authorize="isAnonymous()"> 
+		<h4>Header for non-authenticated users</h4>
+		<a class="btn btn-success" th:href="@{/login}">Login</a> <a
+			class="btn btn-primary" th:href="@{/user/add}">Register</a>
+	</div>
+-->
+
+	<div layout:fragment="content" class="text-center">
+		<h1 class="mt-5">
+			<em>Movie Rator</em>
+		</h1>
+		<a class="btn btn-success" th:href="@{/login}">Login</a>
+		<a class="btn btn-primary" th:href="@{/user/add}">Register</a>
+		<div class="container text-start my-4" style="max-width: 350px">
+			<div>
+				<h4>Search Movie</h4>
+				<form action="#" th:action="@{/search-media}" method="GET">
+					<div class="row my-2">
+						<input type="text" name="searchTerm" th:value="${searchTerm}"
+							required class="form-control" placeholder="Movie or series title" />
+					</div>
+					<div class="row my-2">
+						<button type="submit" class="btn btn-primary">Search</button>
+					</div>
+				</form>
+			</div>
+			<div class="mt-4">
+				<h4>Search Actor</h4>
+				<form action="#" th:action="@{/search-actor}" method="GET">
+					<div class="row my-2">
+						<input type="text" name="searchTerm" required
+							th:value="${searchTerm}" class="form-control"
+							placeholder="Actor name" />
+					</div>
+					<div class="row my-2">
+						<button type="submit" class="btn btn-primary">Search</button>
+					</div>
+				</form>
+			</div>
+		</div>
+		<div class="container mt-5 text-start">
+			<div class="row">
+				<h4>Subscribe to Newsletter</h4>
+			</div>
+			<form action="#" th:action="@{/subscribe-to-newsletter}"
+				th:object="${newsletterSubscribe}" method="post">
+				<div class="row">
+					<div class="col-3">
+						<input type="email" th:field="*{email}" required
+							class="form-control" th:errorclass="is-invalid"
+							placeholder="Email Address" />
+						<div th:if="${#fields.hasErrors('email')}"
+							class="invalid-feedback" th:errors="*{email}">Test</div>
+					</div>
+					<div class="col-7">
+						<button class="btn btn-secondary">Subscribe</button>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+</body>
 </html>

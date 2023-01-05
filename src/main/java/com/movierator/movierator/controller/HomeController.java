@@ -20,6 +20,7 @@ import com.movierator.movierator.model.Moderator;
 import com.movierator.movierator.model.NewsletterSubscriber;
 import com.movierator.movierator.model.RegularUser;
 import com.movierator.movierator.model.User;
+import com.movierator.movierator.model.UserRoleType;
 import com.movierator.movierator.repository.AdminRepository;
 import com.movierator.movierator.repository.ModeratorRepository;
 import com.movierator.movierator.repository.RegularUserRepository;
@@ -31,6 +32,12 @@ public class HomeController {
 	private static final String ADMIN_SESSION = "adminSession";
 	private static final String MODERATOR_SESSION = "moderatorSession";
 	private static final String REGULAR_USER_SESSION = "regularUserSession";
+	
+	private static final String ADMIN_ROLE = "ADMIN";
+	private static final String MODERATOR_ROLE = "MODERATOR";
+	private static final String REGULAR_USER_ROLE = "REGULAR USER";
+	
+	
 
 	private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
@@ -63,30 +70,25 @@ public class HomeController {
 
 		// searching in the database for the underlying user
 		Optional<User> loggedUserOpt = userRepository.findUserByLogin(principal.getName());
-		// TODO check is Optional present and return error or logger if not - mb no need
-		// since SpringSecurity does it?
 
-		if (myAuthorities.contains("ADMIN")) {
+		if (myAuthorities.contains(ADMIN_ROLE)) {
 
 			Optional<Admin> adminOpt;
-			// TODO check is Optional present and return error or logger if not - mb no need
-			// since SpringSecurity does it?
+	
 			adminOpt = adminRepository.findAdminByUserId(loggedUserOpt.get().getId());
 			request.getSession().setAttribute(ADMIN_SESSION, adminOpt.get());
 
 			return "admin";
 		}
-		if (myAuthorities.contains("MODERATOR")) {
+		if (myAuthorities.contains(MODERATOR_ROLE)) {
 			Optional<Moderator> moderatorOpt;
 
-			// TODO check is Optional present and return error or logger if not - mb no need
-			// since SpringSecurity does it?
 			moderatorOpt = moderatorRepository.findModeratorByUserId(loggedUserOpt.get().getId());
 			request.getSession().setAttribute(MODERATOR_SESSION, moderatorOpt.get());
 
 			return "moderator";
 		}
-		if (myAuthorities.contains("REGULAR USER")) {
+		if (myAuthorities.contains(REGULAR_USER_ROLE)) {
 			Optional<RegularUser> regularUserOpt;
 
 			// TODO check is Optional present and return error or logger if not - mb no need
@@ -94,7 +96,7 @@ public class HomeController {
 			regularUserOpt = regularUserRepository.findRegularUserByUserId(loggedUserOpt.get().getId());
 			request.getSession().setAttribute(REGULAR_USER_SESSION, regularUserOpt.get());
 
-			return "regular-user";
+			return "index";
 		}
 
 		return "index";
