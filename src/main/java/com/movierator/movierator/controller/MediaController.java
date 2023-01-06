@@ -58,10 +58,13 @@ public class MediaController {
 		boolean hasUserAlreadyReviewed = false;
 		boolean ratingsEmpty = true;
 		
+		if (media.isEmpty()) {
+			return "media-not-found";
+		}
+		
 		if (!allReviewsForMedia.isEmpty()) {
 			ratingsEmpty = false;
 			for(MediaRating rating : allReviewsForMedia) {
-//				reviews.add(new Review());
 				if(!hasUserAlreadyReviewed) {
 					if (rating.getUserName().equals(userName)) {
 						hasUserAlreadyReviewed = true;
@@ -69,7 +72,6 @@ public class MediaController {
 				}
 			}
 		}
-		System.out.println("reviewed: " + hasUserAlreadyReviewed);
 		model.addAttribute("reviewResults", allReviewsForMedia);
 		model.addAttribute("hasUserAlreadyReviewed", hasUserAlreadyReviewed);
 		model.addAttribute("reviewForm", new Review());
@@ -87,7 +89,7 @@ public class MediaController {
 	}
 	
 	@PostMapping("/review/{id}")
-	public String validateAndStoreReview(@PathVariable long id, Review review) {
+	public String validateAndStoreReview(@PathVariable long id, Review review, Model model) {
 		String userName = SecurityContextHolder.getContext().getAuthentication().getName();
 		MediaRating mediaRating = new MediaRating();
 		
@@ -98,6 +100,6 @@ public class MediaController {
 		
 		mediaRatingRepository.save(mediaRating);
 		
-		return "media-detail";
+		return showMedia(id, model);
 	}
 }

@@ -30,7 +30,6 @@ public class MediaRating implements Serializable {
   @NotEmpty(message = "userName is required")
   private String userName;
 
-//  @NotEmpty(message = "rating is required")
   @DecimalMax(value = "5", message = "Rating must be less or equal 6")
   @DecimalMin(value = "0", message = "Rating must be more or equal 0")
   private int rating;
