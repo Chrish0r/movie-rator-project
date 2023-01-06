@@ -91,8 +91,6 @@ public class HomeController {
 		if (myAuthorities.contains(REGULAR_USER_ROLE)) {
 			Optional<RegularUser> regularUserOpt;
 
-			// TODO check is Optional present and return error or logger if not - mb no need
-			// since SpringSecurity does it?
 			regularUserOpt = regularUserRepository.findRegularUserByUserId(loggedUserOpt.get().getId());
 			request.getSession().setAttribute(REGULAR_USER_SESSION, regularUserOpt.get());
 

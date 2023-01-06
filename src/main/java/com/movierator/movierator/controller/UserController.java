@@ -105,43 +105,44 @@ public class UserController {
 		return mv;
 	}
 
-	@RequestMapping("/update/{id}")
+	@RequestMapping("/user/update/{id}")
 	public ModelAndView showUpdateForm(@PathVariable("id") Long userId) {
 
 		ModelAndView mv = new ModelAndView();
-		mv.setViewName("redirect:/user/all");
+		mv.setViewName("redirect:/");
 
 		/*
 		 * User user = userRepository.findById(id) .orElseThrow(() -> new
 		 * IllegalArgumentException("Invalid user Id:" + id));
 		 */
-		logger.info("updating the user ID " + userId);
+		logger.info("updating the user with the user id " + userId);
 
 		Optional<RegularUser> regularUserOpt;
 		regularUserOpt = regularUserRepository.findRegularUserByUserId(userId);
 		if (regularUserOpt.isPresent()) {
 			mv.setViewName("user/user-regular-user-update");
 			mv.addObject("regularUserForm", regularUserOpt.get());
-			logger.info("Updating the regular user LOGIN " + regularUserOpt.get().getUser().getLogin());
+			logger.info("Updating the regular user with the user name " + regularUserOpt.get().getUser().getLogin());
 			return mv;
 		}
 
 		return mv;
 	}
 
-	@RequestMapping(value = "/regular-user/update/process")
+	@RequestMapping(value = "/user/regular-user/update/process")
 	public ModelAndView updateRegularUser(@Valid @ModelAttribute("regularUserForm") RegularUser regularUserForm,
 			BindingResult bindingResult) {
 
 		ModelAndView mv = new ModelAndView();
+		
+		// TODO limit to email field only
+//		if (bindingResult.hasErrors()) {
+//			logger.warn(bindingResult.toString());
+//			mv.setViewName("/user/user-regular-user-update");
+//			return mv;
+//		}
 
-		if (bindingResult.hasErrors()) {
-			logger.warn(bindingResult.toString());
-			mv.setViewName("/user/user-regular-user-update");
-			return mv;
-		}
-
-		logger.info("Processing the update of the regular user ID " + regularUserForm.getId());
+		logger.info("Processing the update of the regular user with the id " + regularUserForm.getId());
 
 		User userForm = regularUserForm.getUser();
 		// load user from database
@@ -152,7 +153,7 @@ public class UserController {
 		regularUserRepository.save(regularUserForm);
 
 		mv.addObject("user updated", "Regular User updated!");
-		mv.setViewName("redirect:/user/all");
+		mv.setViewName("redirect:/");
 		return mv;
 	}
 
@@ -166,7 +167,7 @@ public class UserController {
 		userRepository.save(user);
 
 		ModelAndView mv = new ModelAndView();
-		mv.setViewName("redirect:/user/all");
+		mv.setViewName("redirect:/");
 		mv.addObject("user deleted", "User deleted!");
 
 		return mv;
