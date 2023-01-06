@@ -1,12 +1,61 @@
 <!DOCTYPE html>
 <html layout:decorate="~{layouts/default-layout}">
-  <head>
-    <title>Home</title>
-  </head>
-  <body>
-    <div layout:fragment="content" class="text-center mt-8">
-      <h1 class="mt-5" th:text="${media.name}"></h1>
-      <h4 class="mt-3" th:text="${'Average Rating: ' + media.avgRating}"></h4>
-    </div>
-  </body>
+<head>
+<title>Home</title>
+</head>
+<body>
+	<div layout:fragment="content" class="text-center mt-8">
+		<h1 class="mt-5" th:text="${media.name}"></h1>
+		<h4 class="mt-3" th:text="${'Average Rating: ' + media.avgRating}"></h4>
+		<div sec:authorize="hasAuthority('REGULAR USER')">
+
+			<div class="d-flex flex-column w-50"
+				th:unless="${hasUserAlreadyReviewed}">
+				<form action="#" th:action="${'/review/' + media.id}" method="post"
+					th:object="${reviewForm}">
+					<div class="form-group mb-3">
+						<h3 for="review">Review:</h3>
+						<div class="w-25 mb-3">
+							<select class="form-select" id="inputGroupSelect01"
+								style="max-width: 100px" th:field="*{rating}">
+								<option th:value="0">0</option>
+								<option th:value="1">1</option>
+								<option th:value="2">2</option>
+								<option th:value="3">3</option>
+								<option th:value="4">4</option>
+								<option th:value="5">5</option>
+							</select>
+						</div>
+						<textarea type="text" class="form-control" rows="5"
+							id="reviewText" th:field="*{reviewText}">></textarea>
+						<input type="submit" class="btn btn-primary mt-3">
+					</div>
+				</form>
+			</div>
+			<table class="border text-center table">
+				<thead class="border table-dark">
+					<tr>
+						<th class="border" scope="col">username</th>
+						<th class="border" scope="col">review</th>
+						<th class="border" scope="col">rating</th>
+						<th sec:authorize="hasAuthority('MODERATOR')" scope="col"
+							class="border">DELETE</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:if="${ratingsEmpty}" class="text-center">
+						<td colspan="4">There are no reviews...</td>
+					</tr>
+					<tr th:each="reviewResult : ${reviewResults}">
+						<td class="border" th:text="${reviewResult.userName}"></td>
+						<td class="border" th:text="${reviewResult.reviewText}"></td>
+						<td class="border" th:text="${reviewResult.rating}"></td>
+						<td sec:authorize="hasAuthority('MODERATOR')" class="border"><button>delete</button></td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+</body>
 </html>
+z

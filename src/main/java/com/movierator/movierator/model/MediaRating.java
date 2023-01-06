@@ -2,6 +2,7 @@ package com.movierator.movierator.model;
 
 import java.io.Serializable;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -12,6 +13,7 @@ import javax.validation.constraints.DecimalMax;
 import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.NotEmpty;
 
+
 @Entity
 @Table(name = MediaRating.TABLE, indexes = @Index(name = "mediaId", columnList = "mediaId"))
 public class MediaRating implements Serializable {
@@ -21,14 +23,19 @@ public class MediaRating implements Serializable {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
-
-  @NotEmpty(message = "mediaId is required")
+  
+  @DecimalMin(value = "0", message = "mediaId is required")
   private long mediaId;
+  
+  @NotEmpty(message = "userName is required")
+  private String userName;
 
-  @NotEmpty(message = "rating is required")
   @DecimalMax(value = "5", message = "Rating must be less or equal 6")
   @DecimalMin(value = "0", message = "Rating must be more or equal 0")
   private int rating;
+  
+  @Column(columnDefinition="TEXT")
+  private String reviewText;
 
   public Long getId() {
     return id;
@@ -53,4 +60,20 @@ public class MediaRating implements Serializable {
   public void setRating(int rating) {
     this.rating = rating;
   }
+
+public String getReviewText() {
+	return reviewText;
+}
+
+public void setReviewText(String reviewText) {
+	this.reviewText = reviewText;
+}
+
+public String getUserName() {
+	return userName;
+}
+
+public void setUserName(String userName) {
+	this.userName = userName;
+}
 }
