@@ -111,10 +111,6 @@ public class UserController {
 		ModelAndView mv = new ModelAndView();
 		mv.setViewName("redirect:/");
 
-		/*
-		 * User user = userRepository.findById(id) .orElseThrow(() -> new
-		 * IllegalArgumentException("Invalid user Id:" + id));
-		 */
 		logger.info("updating the user with the user id " + userId);
 
 		Optional<RegularUser> regularUserOpt;
@@ -135,7 +131,7 @@ public class UserController {
 
 		ModelAndView mv = new ModelAndView();
 		
-		// TODO limit to email field only
+//		// TODO limit to email field only
 //		if (bindingResult.hasErrors()) {
 //			logger.warn(bindingResult.toString());
 //			mv.setViewName("/user/user-regular-user-update");
@@ -152,7 +148,7 @@ public class UserController {
 		regularUserForm.setUser(userDB);
 		regularUserRepository.save(regularUserForm);
 
-		mv.addObject("user updated", "Regular User updated!");
+		mv.addObject("user updated", "Regular user updated!");
 		mv.setViewName("redirect:/");
 		return mv;
 	}

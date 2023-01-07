@@ -1,7 +1,7 @@
 package com.movierator.movierator.model;
 
 public enum UserRoleType {
-	ADMIN("ADMIN"), MODERATOR("MODERATOR"), REGULAR_USER("REGULAR USER");
+	ADMIN("ADMIN"), MODERATOR("MODERATOR"), REGULAR_USER("REGULAR_USER");
 
 	private String description;
 

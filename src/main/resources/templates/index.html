@@ -5,7 +5,7 @@
 </head>
 <body>
 
-	<div sec:authorize=”isAuthenticated()”>
+
 		<div layout:fragment="header" sec:authorize="hasRole('ADMIN')">
 			<h4>Logged in as an admin</h4>
 		</div>
@@ -15,8 +15,7 @@
 		</div>
 
 		<div layout:fragment="header"
-			sec:authorize="hasAuthority('REGULAR USER')">
-		<!--  	<h4>Hello <span th:text="${#authentication.getPrincipal().getUsername()}"></span>!</h4> -->
+			sec:authorize="hasAuthority('REGULAR_USER')">
 		<h4>Hello, <b> <span th:text="${session.regularUserSession.user.login}" ></span></b>!</h4>
 
 			<nav class="navbar navbar-expand-lg navbar-light bg-light">
@@ -44,16 +43,16 @@
 			</nav>
 		</div>
 
-	</div>
 
-	<!-- View for not logged in user does not work + not ready yet  - TODO: fix 
+
+	<!-- View for not logged in user does not work + not ready yet  - TODO: fix  -->
 
 	<div layout:fragment="header" sec:authorize="isAnonymous()"> 
 		<h4>Header for non-authenticated users</h4>
 		<a class="btn btn-success" th:href="@{/login}">Login</a> <a
 			class="btn btn-primary" th:href="@{/user/add}">Register</a>
 	</div>
--->
+
 
 	<div layout:fragment="content" class="text-center">
 		<h1 class="mt-5">

@@ -6,7 +6,7 @@
 <body>
 	<!--  TODO: Info on how to inherit layouts using th and apply it here -->
 	<div layout:fragment="header"
-		sec:authorize="hasAuthority('REGULAR USER')">
+		sec:authorize="hasAuthority('REGULAR_USER')">
 		<h4>
 			Hello <span th:text="${#authentication.getPrincipal().getUsername()}"></span>!
 		</h4>

@@ -20,7 +20,6 @@ import com.movierator.movierator.model.Moderator;
 import com.movierator.movierator.model.NewsletterSubscriber;
 import com.movierator.movierator.model.RegularUser;
 import com.movierator.movierator.model.User;
-import com.movierator.movierator.model.UserRoleType;
 import com.movierator.movierator.repository.AdminRepository;
 import com.movierator.movierator.repository.ModeratorRepository;
 import com.movierator.movierator.repository.RegularUserRepository;
@@ -35,7 +34,7 @@ public class HomeController {
 	
 	private static final String ADMIN_ROLE = "ADMIN";
 	private static final String MODERATOR_ROLE = "MODERATOR";
-	private static final String REGULAR_USER_ROLE = "REGULAR USER";
+	private static final String REGULAR_USER_ROLE = "REGULAR_USER";
 	
 	
 
