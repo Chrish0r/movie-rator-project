@@ -1,6 +1,7 @@
 package com.movierator.movierator.controller;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 
@@ -8,9 +9,11 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.movierator.movierator.controller.formObjects.MediaDetail;
 import com.movierator.movierator.controller.formObjects.MediaSearchResult;
@@ -56,26 +59,49 @@ public class MediaController {
 		String userName = SecurityContextHolder.getContext().getAuthentication().getName();
 		
 		boolean hasUserAlreadyReviewed = false;
-		boolean ratingsEmpty = true;
+		boolean ratingsEmpty = false;
 		
 		if (media.isEmpty()) {
 			return "media-not-found";
 		}
 		
 		if (!allReviewsForMedia.isEmpty()) {
-			ratingsEmpty = false;
-			for(MediaRating rating : allReviewsForMedia) {
-				if(!hasUserAlreadyReviewed) {
+			Iterator<MediaRating> iterator = allReviewsForMedia.iterator();
+			while (iterator.hasNext()) {
+				MediaRating rating = iterator.next();
+				if (!hasUserAlreadyReviewed) {
 					if (rating.getUserName().equals(userName)) {
+						model.addAttribute("userReview", rating);
+						iterator.remove();
 						hasUserAlreadyReviewed = true;
 					}
 				}
 			}
+
+//				if(!hasUserAlreadyReviewed) {
+//					if (rating.getUserName().equals(userName)) {
+//						
+//						allReviewsForMedia.remove(rating);
+//						model.addAttribute("userReview", rating);
+//						
+//						if(allReviewsForMedia.size() == 1) {
+//							break;
+//						}
+//						if(allReviewsForMedia.isEmpty()) {
+//							ratingsEmpty = true;
+//							break;
+//						}
+//					}
+//				}
+//			}
+			
 		}
-		model.addAttribute("reviewResults", allReviewsForMedia);
+		if(!allReviewsForMedia.isEmpty()) {
+			model.addAttribute("reviewResults", allReviewsForMedia);
+		}
 		model.addAttribute("hasUserAlreadyReviewed", hasUserAlreadyReviewed);
 		model.addAttribute("reviewForm", new Review());
-		model.addAttribute("ratingsEmpty", ratingsEmpty);
+		model.addAttribute("ratingsEmpty", allReviewsForMedia.isEmpty());
 		
 		if (media.isEmpty()) {
 			return "media-not-found";
@@ -100,6 +126,29 @@ public class MediaController {
 		
 		mediaRatingRepository.save(mediaRating);
 		
-		return showMedia(id, model);
+		return "redirect:/media/" + id;
+	}
+	
+	@GetMapping("/deleteReview/{id}")
+	public String deleteReview(@RequestParam(name = "mediaId") long mediaId, @PathVariable long id) {
+		
+		mediaRatingRepository.deleteById(id);
+		
+		return "redirect:/media/" + mediaId;
+	}
+	
+	@GetMapping("/edit/{id}")
+	public String editReview(@PathVariable long id, Model model) {
+		model.addAttribute("id", id);
+		model.addAttribute("reviewForm", new Review());
+		return "edit-review";
+	}
+	
+	@PostMapping("/edit/process/{id}")
+	public String processEditReview(@PathVariable long id, Review review) {
+		String userName = SecurityContextHolder.getContext().getAuthentication().getName();
+		mediaRatingRepository.updateReviewTextAndRatingByUserNameAndMediaId(review.getReviewText(), review.getRating(), userName, id);
+		
+		return "redirect:/media/{id}";
 	}
 }

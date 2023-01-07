@@ -8,9 +8,31 @@
 		<h1 class="mt-5" th:text="${media.name}"></h1>
 		<h4 class="mt-3" th:text="${'Average Rating: ' + media.avgRating}"></h4>
 		<div sec:authorize="hasAuthority('REGULAR_USER')">
-
 			<div class="d-flex flex-column w-50"
-				th:unless="${hasUserAlreadyReviewed}">
+				th:if="${hasUserAlreadyReviewed}">
+					<h3>your review</h3>
+				<table class="border text-center table">
+					<thead class="border table-dark">
+						<tr>
+							<th class="border" scope="col">username</th>
+							<th class="border" scope="col">review</th>
+							<th class="border" scope="col">rating</th>
+							<th class="border" scope="col"></th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td class="border" th:text="${userReview.userName}">
+							<td class="border" th:text="${userReview.reviewText}"></td>
+							<td class="border" th:text="${userReview.rating}"></td>
+							<td class="border"><a class="btn btn-success" th:href="${'/edit/'+ media.id}">EDIT</a></td>
+						</tr>
+					</tbody>
+				</table>
+
+			</div>
+			<div class="d-flex flex-column w-50"
+				th:if="${!hasUserAlreadyReviewed}">
 				<form action="#" th:action="${'/review/' + media.id}" method="post"
 					th:object="${reviewForm}">
 					<div class="form-group mb-3">
@@ -32,30 +54,34 @@
 					</div>
 				</form>
 			</div>
-			<table class="border text-center table">
-				<thead class="border table-dark">
-					<tr>
-						<th class="border" scope="col">username</th>
-						<th class="border" scope="col">review</th>
-						<th class="border" scope="col">rating</th>
-						<th sec:authorize="hasAuthority('MODERATOR')" scope="col"
-							class="border">DELETE</th>
-					</tr>
-				</thead>
-				<tbody>
-					<tr th:if="${ratingsEmpty}" class="text-center">
-						<td colspan="4">There are no reviews...</td>
-					</tr>
-					<tr th:each="reviewResult : ${reviewResults}">
-						<td class="border" th:text="${reviewResult.userName}"></td>
-						<td class="border" th:text="${reviewResult.reviewText}"></td>
-						<td class="border" th:text="${reviewResult.rating}"></td>
-						<td sec:authorize="hasAuthority('MODERATOR')" class="border"><button>delete</button></td>
-					</tr>
-				</tbody>
-			</table>
+			<div>
+				<table class="border text-center table">
+					<thead class="border table-dark">
+						<tr>
+							<th class="border" scope="col">username</th>
+							<th class="border" scope="col">review</th>
+							<th class="border" scope="col">rating</th>
+							<th sec:authorize="hasAuthority('MODERATOR')" scope="col"
+								class="border">DELETE</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr th:each="reviewResult : ${reviewResults}">
+							<td class="border" th:text="${reviewResult.userName}"></td>
+							<td class="border" th:text="${reviewResult.reviewText}"></td>
+							<td class="border" th:text="${reviewResult.rating}"></td>
+							<td sec:authorize="hasAuthority('MODERATOR')" class="border">
+								<form th:action="${'/deleteReview/' + reviewResult.id}"
+									method="get">
+									<button type="submit" class="btn btn-danger" name="mediaId"
+										th:value="${media.id}">DELETE</button>
+								</form>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
 		</div>
 	</div>
 </body>
 </html>
-z
