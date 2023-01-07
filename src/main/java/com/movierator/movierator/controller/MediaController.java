@@ -3,17 +3,16 @@ package com.movierator.movierator.controller;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.servlet.ModelAndView;
 
 import com.movierator.movierator.controller.formObjects.MediaDetail;
 import com.movierator.movierator.controller.formObjects.MediaSearchResult;
@@ -57,9 +56,7 @@ public class MediaController {
 		Optional<Media> media = this.mediaEntityRepository.findById(id);
 		List<MediaRating> allReviewsForMedia = this.mediaRatingRepository.getByMediaId(id);
 		String userName = SecurityContextHolder.getContext().getAuthentication().getName();
-		
 		boolean hasUserAlreadyReviewed = false;
-		boolean ratingsEmpty = false;
 		
 		if (media.isEmpty()) {
 			return "media-not-found";
@@ -77,25 +74,8 @@ public class MediaController {
 					}
 				}
 			}
-
-//				if(!hasUserAlreadyReviewed) {
-//					if (rating.getUserName().equals(userName)) {
-//						
-//						allReviewsForMedia.remove(rating);
-//						model.addAttribute("userReview", rating);
-//						
-//						if(allReviewsForMedia.size() == 1) {
-//							break;
-//						}
-//						if(allReviewsForMedia.isEmpty()) {
-//							ratingsEmpty = true;
-//							break;
-//						}
-//					}
-//				}
-//			}
-			
 		}
+		
 		if(!allReviewsForMedia.isEmpty()) {
 			model.addAttribute("reviewResults", allReviewsForMedia);
 		}
