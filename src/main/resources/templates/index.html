@@ -1,65 +1,58 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org" layout:decorate="~{layouts/default-layout}">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="https://www.thymeleaf.org"
+	layout:decorate="~{layouts/default-layout}">
 <head>
 <title>Home</title>
 </head>
 <body>
+	<div layout:fragment="header">
+		<div sec:authorize="hasAuthority('REGULAR_USER')"></span><h4> Hello <b> <span 
+				th:text="${session.regularUserSession.user.login}"></span></b>!
+		</h4> </div>
+		
+		<div sec:authorize="hasAuthority('Admin')"></span><h4> Hello Admin <b> <span 
+				th:text="${session.adminSession.user.login}"></span></b>!
+		</h4> </div>
 
+		<nav class="navbar navbar-expand-lg navbar-light bg-light">
+			<div class="collapse navbar-collapse" id="navbarSupportedContent">
+				<ul class="navbar-nav mr-auto">
+					<li class="nav-item active"><a class="nav-link" th:href="@{/}">Home</a></li>
 
-		<div layout:fragment="header" sec:authorize="hasRole('ADMIN')">
-			<h4>Logged in as an admin</h4>
-		</div>
-
-		<div layout:fragment="header" sec:authorize="hasRole('MODERATOR')">
-			<h4>Logged in as moderator</h4>
-		</div>
-
-		<div layout:fragment="header"
-			sec:authorize="hasAuthority('REGULAR_USER')">
-		<h4>Hello, <b> <span th:text="${session.regularUserSession.user.login}" ></span></b>!</h4>
-
-			<nav class="navbar navbar-expand-lg navbar-light bg-light">
-				<div class="collapse navbar-collapse" id="navbarSupportedContent">
-					<ul class="navbar-nav mr-auto">
-						<li class="nav-item active"><a class="nav-link"
-							th:href="@{/}">Home</a></li>
-
-						<li><a class="nav-link" th:href="@{/user/update/{id}(id=${session.regularUserSession.user.id})}">Update
-								Account</a></li>
-
-						<li class="nav-item dropdown"><a
-							class="nav-link dropdown-toggle" href="#" id="navbarDropdown"
-							role="button" data-toggle="dropdown" aria-haspopup="true"
-							aria-expanded="true"> Account </a>
-							<div class="dropdown-menu" aria-labelledby="navbarDropdown">
-								<a class="dropdown-item" th:href="@{/user/update/{id}(id=${session.regularUserSession.user.id})}">Update Email</a> 
+					<li> <a sec:authorize="hasAuthority('REGULAR_USER')" class="nav-link"
+						th:href="@{/user/update/{id}(id=${session.regularUserSession.user.id})}">Update
+							Email</a></li>
+							
+						<li> <a sec:authorize="hasAuthority('ADMIN')" class="nav-link"
+						th:href="#">Show Users</a></li>	
+								
+					<!--  TODO: Fix dropdown menu -->
+					<li class="nav-item dropdown" sec:authorize="isAuthenticated()"><a
+						class="nav-link dropdown-toggle" href="#" id="navbarDropdown"
+						role="button" data-toggle="dropdown" aria-haspopup="true"
+						aria-expanded="true"> Account </a>
+						<div class="dropdown-menu" aria-labelledby="navbarDropdown">
+							<a sec:authorize="hasAuthority('REGULAR_USER')" class="dropdown-item"
+								th:href="@{/user/update/{id}(id=${session.regularUserSession.user.id})}">Update
+								Email</a>
 							<div class="dropdown-divider"></div>
-								<a class="dropdown-item" href="#">Something else here</a>
-							</div></li>
-						<li><a class="nav-link" th:href="@{/logout}">Logout</a></li>
-
-					</ul>
-				</div>
-			</nav>
-		</div>
-
-
-
-	<!-- View for not logged in user does not work + not ready yet  - TODO: fix  -->
-
-	<div layout:fragment="header" sec:authorize="isAnonymous()"> 
-		<h4>Header for non-authenticated users</h4>
-		<a class="btn btn-success" th:href="@{/login}">Login</a> <a
-			class="btn btn-primary" th:href="@{/user/add}">Register</a>
+							<a class="dropdown-item" href="#">Something else here</a>
+						</div></li>
+						
+					<li><a sec:authorize="isAuthenticated()" class="nav-link" th:href="@{/logout}">Logout</a></li>
+					
+					<li> <a style="margin-right:10px;" sec:authorize="isAnonymous()" class="btn btn-success" th:href="@{/login}" >Login</a> </li>
+					<li><a style="margin-right:10px;" sec:authorize="isAnonymous()" class="btn btn-primary" th:href="@{/user/add}">Register</a> </li>
+				</ul>
+			</div>
+		</nav>
 	</div>
-
 
 	<div layout:fragment="content" class="text-center">
 		<h1 class="mt-5">
 			<em>Movie Rator</em>
 		</h1>
-		<a class="btn btn-success" th:href="@{/login}">Login</a>
-		<a class="btn btn-primary" th:href="@{/user/add}">Register</a>
 		<div class="container text-start my-4" style="max-width: 350px">
 			<div>
 				<h4>Search Movie</h4>
