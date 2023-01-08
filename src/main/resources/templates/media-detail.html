@@ -64,7 +64,7 @@
 						<th class="border" scope="col" th:text="#{username}"></th>
 						<th class="border" scope="col" th:text="#{review}"></th>
 						<th class="border" scope="col" th:text="#{rating}"></th>
-						<th sec:authorize="hasAuthority('REGULAR_USER')" scope="col"
+						<th sec:authorize="hasAuthority('MODERATOR')" scope="col"
 							class="border" th:text="#{delete}"></th>
 					</tr>
 				</thead>
@@ -73,7 +73,7 @@
 						<td class="border" th:text="${reviewResult.userName}"></td>
 						<td class="border" th:text="${reviewResult.reviewText}"></td>
 						<td class="border" th:text="${reviewResult.rating}"></td>
-						<td sec:authorize="hasAuthority('REGULAR_USER')" class="border">
+						<td sec:authorize="hasAuthority('MODERATOR')" class="border">
 							<form th:action="${'/deleteReview/' + reviewResult.id}"
 								method="get">
 								<button type="submit" class="btn btn-danger" name="mediaId"

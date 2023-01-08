@@ -53,11 +53,11 @@
 		</h1>
 		<div class="container text-start my-4" style="max-width: 350px">
 			<div>
-				<h4 th:text="#{search_movie}"></h4>
+				<h4 th:text="#{search_movies}"></h4>
 				<form action="#" th:action="@{/search-media}" method="GET">
 					<div class="row my-2">
 						<input type="text" name="searchTerm" th:value="${searchTerm}"
-							required class="form-control" placeholder="Movie or series title" />
+							required class="form-control" th:placeholder="#{movie_series_title}" />
 					</div>
 					<div class="row my-2">
 						<button type="submit" class="btn btn-primary" th:text="#{search}"></button>
@@ -70,7 +70,7 @@
 					<div class="row my-2">
 						<input type="text" name="searchTerm" required
 							th:value="${searchTerm}" class="form-control"
-							placeholder="Actor name" />
+							th:placeholder="#{actor_name}" />
 					</div>
 					<div class="row my-2">
 						<button type="submit" class="btn btn-primary" th:text="#{search}"></button>
