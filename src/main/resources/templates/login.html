@@ -1,22 +1,22 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
+<html layout:decorate="~{layouts/default-layout}">
 	<head>
-		<title>Please Log In</title>
+		<title th:text="#{please_login}"></title>
 	</head>
-	<body>
-		<h1>Please Log In</h1>
-		<div th:if="${param.error}">
-			Invalid username and password.</div>
-		<div th:if="${param.logout}">
-			You have been logged out.</div>
+	<body layout:fragment="content">
+		<h1  th:text="#{please_login}"></h1>
+		<div th:if="${param.error}" th:text="#{invalid_login}">
+			</div>
+		<div th:if="${param.logout}" th:text="">
+			</div>
 		<form th:action="@{/login}" method="post">
 			<div>
-			<input type="text" name="username" placeholder="Username"/>
+			<input type="text" name="username" th:placeholder="#{username}"/>
 			</div>
 			<div>
-			<input type="password" name="password" placeholder="Password"/>
+			<input type="password" name="password" th:placeholder="#{password}"/>
 			</div>
-			<input type="submit" value="Log in" />
+			<input type="submit" value="Login" />
 		</form>
 	</body>
 </html>

@@ -2,10 +2,10 @@
 <html xmlns:th="http://www.thymeleaf.org">
    <head></head>
    <body>
-   	<h2>Custom Logout Page</h2>
+   	<h2 th:text="#{logout_page}">Custom Logout Page</h2>
    	
 	<br>
 	  Are you sure you want to leave?<br>   	
-      <a href="<c:url value=/logout/>">Logout</a>
+      <a href="<c:url value=/logout/>" th:text="#{logout}">Logout</a>
    </body>
 </html>

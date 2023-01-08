@@ -8,7 +8,7 @@
 		<form action="#" th:action="${'/edit/process/' + id}" method="post"
 			th:object="${reviewForm}">
 			<div class="form-group mb-3">
-				<h3 for="review">Edit review:</h3>
+				<h3 for="review" th:text="#{edit_review}"></h3>
 				<div class="w-25 mb-3">
 					<select class="form-select" id="inputGroupSelect01"
 						style="max-width: 100px" th:field="*{rating}">
@@ -22,7 +22,7 @@
 				</div>
 				<textarea type="text" class="form-control" rows="5" id="reviewText"
 					th:field="*{reviewText}">></textarea>
-				<input type="submit" class="btn btn-primary mt-3">
+				<input type="submit" class="btn btn-primary mt-3" th:text="#{confirm}">
 			</div>
 		</form>
 	</div>

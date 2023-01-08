@@ -1,9 +1,11 @@
 package com.movierator.movierator.tmdbApi;
 
+import java.util.Locale;
 import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -40,7 +42,7 @@ public class TMDBApi<T extends TMDBResponse<U>, U> {
         .fromUriString(config.getUrl())
         .path("/search")
         .path(this.entityEndpoint)
-        .queryParam("language", "de")
+        .queryParam("language", LocaleContextHolder.getLocale().getLanguage())
         .queryParam("page", 1)
         .queryParam("query", searchTerm)
         .encode()
@@ -59,7 +61,7 @@ public class TMDBApi<T extends TMDBResponse<U>, U> {
         .fromUriString(config.getUrl())
         .path(this.entityEndpoint)
         .path("/" + id)
-        .queryParam("language", "de")
+        .queryParam("language", LocaleContextHolder.getLocale().getLanguage())
         .encode()
         .toUriString();
 

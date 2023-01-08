@@ -7,11 +7,11 @@
 </head>
 <body>
 	<div layout:fragment="header">
-		<div sec:authorize="hasAuthority('REGULAR_USER')"></span><h4> Hello <b> <span 
+		<div sec:authorize="hasAuthority('REGULAR_USER')"></span><h4 th:text="#{hello}"> Hello <b> <span 
 				th:text="${session.regularUserSession.user.login}"></span></b>!
 		</h4> </div>
 		
-		<div sec:authorize="hasAuthority('Admin')"></span><h4> Hello Admin <b> <span 
+		<div sec:authorize="hasAuthority('Admin')"></span><h4 th:text="#{hello} + ' Admin'"><b> <span 
 				th:text="${session.adminSession.user.login}"></span></b>!
 		</h4> </div>
 
@@ -21,11 +21,10 @@
 					<li class="nav-item active"><a class="nav-link" th:href="@{/}">Home</a></li>
 
 					<li> <a sec:authorize="hasAuthority('REGULAR_USER')" class="nav-link"
-						th:href="@{/user/update/{id}(id=${session.regularUserSession.user.id})}">Update
-							Email</a></li>
+						th:href="@{/user/update/{id}(id=${session.regularUserSession.user.id})}" th:text="#{update_email}"></a></li>
 							
 						<li> <a sec:authorize="hasAuthority('ADMIN')" class="nav-link"
-						th:href="#">Show Users</a></li>	
+						th:href="#" th:text="#{show_users}"></a></li>	
 								
 					<!--  TODO: Fix dropdown menu -->
 					<li class="nav-item dropdown" sec:authorize="isAuthenticated()"><a
@@ -34,8 +33,7 @@
 						aria-expanded="true"> Account </a>
 						<div class="dropdown-menu" aria-labelledby="navbarDropdown">
 							<a sec:authorize="hasAuthority('REGULAR_USER')" class="dropdown-item"
-								th:href="@{/user/update/{id}(id=${session.regularUserSession.user.id})}">Update
-								Email</a>
+								th:href="@{/user/update/{id}(id=${session.regularUserSession.user.id})}" th:text="#{update_email}"></a>
 							<div class="dropdown-divider"></div>
 							<a class="dropdown-item" href="#">Something else here</a>
 						</div></li>
@@ -55,19 +53,19 @@
 		</h1>
 		<div class="container text-start my-4" style="max-width: 350px">
 			<div>
-				<h4>Search Movie</h4>
+				<h4 th:text="#{search_movie}"></h4>
 				<form action="#" th:action="@{/search-media}" method="GET">
 					<div class="row my-2">
 						<input type="text" name="searchTerm" th:value="${searchTerm}"
 							required class="form-control" placeholder="Movie or series title" />
 					</div>
 					<div class="row my-2">
-						<button type="submit" class="btn btn-primary">Search</button>
+						<button type="submit" class="btn btn-primary" th:text="#{search}"></button>
 					</div>
 				</form>
 			</div>
 			<div class="mt-4">
-				<h4>Search Actor</h4>
+				<h4 th:text="#{search_actor}"></h4>
 				<form action="#" th:action="@{/search-actor}" method="GET">
 					<div class="row my-2">
 						<input type="text" name="searchTerm" required
@@ -75,14 +73,14 @@
 							placeholder="Actor name" />
 					</div>
 					<div class="row my-2">
-						<button type="submit" class="btn btn-primary">Search</button>
+						<button type="submit" class="btn btn-primary" th:text="#{search}"></button>
 					</div>
 				</form>
 			</div>
 		</div>
 		<div class="container mt-5 text-start">
 			<div class="row">
-				<h4>Subscribe to Newsletter</h4>
+				<h4 th:text="#{sub_newsletter}"></h4>
 			</div>
 			<form action="#" th:action="@{/subscribe-to-newsletter}"
 				th:object="${newsletterSubscribe}" method="post">
@@ -95,7 +93,7 @@
 							class="invalid-feedback" th:errors="*{email}">Test</div>
 					</div>
 					<div class="col-7">
-						<button class="btn btn-secondary">Subscribe</button>
+						<button class="btn btn-secondary" th:text="#{subscribe}"></button>
 					</div>
 				</div>
 			</form>

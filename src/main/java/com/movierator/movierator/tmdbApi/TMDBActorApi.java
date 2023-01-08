@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
@@ -23,7 +24,7 @@ public class TMDBActorApi extends TMDBApi<TMDBActorResponse, TMDBActor> {
         .path(this.getEntityEndpoint())
         .path("/" + actorId)
         .path("/movie_credits")
-        .queryParam("language", "de")
+        .queryParam("language", LocaleContextHolder.getLocale().getLanguage())
         .encode()
         .toUriString();
 

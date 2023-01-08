@@ -16,13 +16,13 @@
 					<div class="col-12 col-md-9 col-lg-7 col-xl-6">
 						<div class="card" style="border-radius: 15px;">
 							<div class="card-body p-5">
-								<h2 class="text-uppercase text-center mb-5">Create an account</h2>
+								<h2 class="text-uppercase text-center mb-5" th:text="#{create_account}"></h2>
 								<!-- <form:form method="POST" modelAttribute="registerForm" class="form-horizontal" action="register/confirmation">   -->
 								<form action="#" th:action="@{/sign-up}" th:object="${user}" method="POST" modelAttribute="registerForm" class="form-horizontal"> 
 									<fieldset>
 										<div class="control-group">
 											<!-- User Name-->
-											<label class="control-label" for="login">User Name</label>
+											<label class="control-label" for="login" th:text="#{username}"></label>
 											<div class="controls">
 												<input th:field="*{login}" class="input-xlarge" type="text" placeholder=" e.g., spaceman" required="required" />
 											</div>
@@ -38,7 +38,7 @@
 										</div>
 										<div class="control-group">
 											<!-- Password-->
-											<label class="control-label" for="password">Password</label>
+											<label class="control-label" for="password" th:text="#{password}"></label>
 											<div class="controls">
 												<input class="input-xlarge" id="password" type="password"
 													name="password" placeholder="At least 4 characters"
@@ -47,7 +47,7 @@
 										</div>
 										<div class="control-group">
 											<!-- Password-->
-											<label class="control-label" for="password_confirm">Confirm Password
+											<label class="control-label" for="password_confirm" th:text="#{confirm_password}">
 												</label>
 											<div class="controls">
 												<input class="input-xlarge" id="password_confirm"
@@ -58,10 +58,9 @@
 										<div class="control-group">
 											<!-- Button-->
 											<div class="controls">
-												<button class="btn btn-success">Register</button>
+												<button class="btn btn-success" th:text="#{register}">Register</button>
 												<!-- <node></node> -->
-												<p class="text-center">
-													Have an account? <a class="navbar-brand" href="login">Log
+												<p class="text-center" th:text="#{have_account}"><a class="navbar-brand" href="login">Log
 														In</a>
 												</p>
 											</div>
