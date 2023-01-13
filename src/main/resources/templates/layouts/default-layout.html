@@ -16,44 +16,114 @@
 
 <link rel="stylesheet" th:href="@{/css/main.css}" />
 
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js">
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js">
+	
 </script>
 <script type="text/javascript">
-$(document).ready(function() {
-    $("#locales").change(function () {
-        var selectedOption = $('#locales').val();
-        var url = window.location.href;
-        if (selectedOption != ''){
-        	if(url.includes('?searchTerm=')){
-        		
-        		let params = (new URL(document.location)).searchParams;
-        		let searchTerm = params.get("searchTerm");
-        		window.location.replace('?searchTerm=' + searchTerm + '&lang=' + selectedOption);
-        	} else {
-        		window.location.replace('?lang=' + selectedOption);
-        	}
-        }
-    });
-});
+	$(document)
+			.ready(
+					function() {
+						$("#locales")
+								.change(
+										function() {
+											var selectedOption = $('#locales')
+													.val();
+											var url = window.location.href;
+											if (selectedOption != '') {
+												if (url
+														.includes('?searchTerm=')) {
+
+													let params = (new URL(
+															document.location)).searchParams;
+													let searchTerm = params
+															.get("searchTerm");
+													window.location
+															.replace('?searchTerm='
+																	+ searchTerm
+																	+ '&lang='
+																	+ selectedOption);
+												} else {
+													window.location
+															.replace('?lang='
+																	+ selectedOption);
+												}
+											}
+										});
+					});
 </script>
 </head>
 <body>
-    <!-- TODO: Add header -->
 	<div class="container">
 		<div class="d-flex bd-highlight mb-3">
 			<div layout:fragment="header">
-				<H4>Static header for prototyping purposes only</H4>
-			</div>
-				<div layout:fragment="languageSelector">
-					<div class="ms-auto p-2 bd-highlight">
-						<select class="form-select" id="locales">
-							<option selected value="" th:text="#{change_language}"></option>
-							<option value="de" th:text="#{german}"></option>
-							<option value="eng" th:text="#{english}"></option>
-						</select>
+				<div layout:fragment="header">
+					<div sec:authorize="hasAuthority('REGULAR_USER')">
+						<h4
+							th:text="#{hello} + ' ' + ${session.regularUserSession.user.login}">
+						</h4>
 					</div>
+
+					<div sec:authorize="hasAuthority('ADMIN')">
+						<h4 th:text="#{hello} + ' Admin'"></h4>
+					</div>
+
+					<div sec:authorize="hasAuthority('MODERATOR')">
+						<h4 th:text="#{hello} + ' Moderator'"></h4>
+					</div>
+
+					<nav class="navbar navbar-expand-lg navbar-light bg-light">
+						<div class="collapse navbar-collapse" id="navbarSupportedContent">
+							<ul class="navbar-nav mr-auto">
+								<li class="nav-item active"><a class="nav-link"
+									th:href="@{/}">Home</a></li>
+
+								<li><a sec:authorize="hasAuthority('REGULAR_USER')"
+									class="nav-link"
+									th:href="@{/user/update/{id}(id=${session.regularUserSession.user.id})}"
+									th:text="#{update_email}"></a></li>
+
+								<li><a sec:authorize="hasAuthority('ADMIN')"
+									class="nav-link" th:href="@{/}" th:text="#{show_users}"></a></li>
+
+								<!--  TODO: Fix dropdown menu -->
+								<li class="nav-item dropdown" sec:authorize="isAuthenticated()"><a
+									class="nav-link dropdown-toggle" href="#" id="navbarDropdown"
+									role="button" data-toggle="dropdown" aria-haspopup="true"
+									aria-expanded="true"> Account </a>
+									<div class="dropdown-menu" aria-labelledby="navbarDropdown">
+										<a sec:authorize="hasAuthority('REGULAR_USER')"
+											class="dropdown-item"
+											th:href="@{/user/update/{id}(id=${session.regularUserSession.user.id})}"
+											th:text="#{update_email}"></a>
+										<div class="dropdown-divider"></div>
+										<a class="dropdown-item" href="#">Something else here</a>
+									</div></li>
+
+								<li><a sec:authorize="isAuthenticated()" class="nav-link"
+									th:href="@{/logout}">Logout</a></li>
+
+								<li><a style="margin-right: 10px;"
+									sec:authorize="isAnonymous()" class="btn btn-success"
+									th:href="@{/login}">Login</a></li>
+								<li><a style="margin-right: 10px;"
+									sec:authorize="isAnonymous()" class="btn btn-primary"
+									th:href="@{/user/add}">Register</a></li>
+							</ul>
+						</div>
+					</nav>
 				</div>
-			
+			</div>
+			<div layout:fragment="languageSelector">
+				<div class="ms-auto p-2 bd-highlight">
+					<select class="form-select" id="locales">
+						<option selected value="" th:text="#{change_language}"></option>
+						<option value="de" th:text="#{german}"></option>
+						<option value="eng" th:text="#{english}"></option>
+					</select>
+				</div>
+			</div>
+
 		</div>
 		<div layout:fragment="content">
 			<h1>Static content for prototyping purposes only</h1>
@@ -65,8 +135,8 @@ $(document).ready(function() {
 		</div>
 	</div>
 	<div id="footer" class="text-center mt-auto">
-      <hr>
-      Copyright &copy; OTH-R IM
-    </div>
-  </body>
+		<hr>
+		Copyright &copy; OTH-R IM
+	</div>
+</body>
 </html>

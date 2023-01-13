@@ -6,47 +6,6 @@
 <title>Home</title>
 </head>
 <body>
-	<div layout:fragment="header">
-		<div sec:authorize="hasAuthority('REGULAR_USER')"></span><h4 th:text="#{hello}"> Hello <b> <span 
-				th:text="${session.regularUserSession.user.login}"></span></b>!
-		</h4> </div>
-		
-		<div sec:authorize="hasAuthority('Admin')"></span><h4 th:text="#{hello} + ' Admin'"><b> <span 
-				th:text="${session.adminSession.user.login}"></span></b>!
-		</h4> </div>
-
-		<nav class="navbar navbar-expand-lg navbar-light bg-light">
-			<div class="collapse navbar-collapse" id="navbarSupportedContent">
-				<ul class="navbar-nav mr-auto">
-					<li class="nav-item active"><a class="nav-link" th:href="@{/}">Home</a></li>
-
-					<li> <a sec:authorize="hasAuthority('REGULAR_USER')" class="nav-link"
-						th:href="@{/user/update/{id}(id=${session.regularUserSession.user.id})}" th:text="#{update_email}"></a></li>
-							
-						<li> <a sec:authorize="hasAuthority('ADMIN')" class="nav-link"
-						th:href="#" th:text="#{show_users}"></a></li>	
-								
-					<!--  TODO: Fix dropdown menu -->
-					<li class="nav-item dropdown" sec:authorize="isAuthenticated()"><a
-						class="nav-link dropdown-toggle" href="#" id="navbarDropdown"
-						role="button" data-toggle="dropdown" aria-haspopup="true"
-						aria-expanded="true"> Account </a>
-						<div class="dropdown-menu" aria-labelledby="navbarDropdown">
-							<a sec:authorize="hasAuthority('REGULAR_USER')" class="dropdown-item"
-								th:href="@{/user/update/{id}(id=${session.regularUserSession.user.id})}" th:text="#{update_email}"></a>
-							<div class="dropdown-divider"></div>
-							<a class="dropdown-item" href="#">Something else here</a>
-						</div></li>
-						
-					<li><a sec:authorize="isAuthenticated()" class="nav-link" th:href="@{/logout}">Logout</a></li>
-					
-					<li> <a style="margin-right:10px;" sec:authorize="isAnonymous()" class="btn btn-success" th:href="@{/login}" >Login</a> </li>
-					<li><a style="margin-right:10px;" sec:authorize="isAnonymous()" class="btn btn-primary" th:href="@{/user/add}">Register</a> </li>
-				</ul>
-			</div>
-		</nav>
-	</div>
-
 	<div layout:fragment="content" class="text-center">
 		<h1 class="mt-5">
 			<em>Movie Rator</em>

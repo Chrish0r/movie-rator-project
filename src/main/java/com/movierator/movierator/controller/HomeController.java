@@ -51,7 +51,7 @@ public class HomeController {
 
 	@Autowired
 	RegularUserRepository regularUserRepository;
-
+	
 	@GetMapping("/")
 	public String home(@ModelAttribute("newsletterSubscribe") NewsletterSubscriber newsletterSubscriber,
 			HttpServletRequest request, Principal principal) {
@@ -77,7 +77,7 @@ public class HomeController {
 			adminOpt = adminRepository.findAdminByUserId(loggedUserOpt.get().getId());
 			request.getSession().setAttribute(ADMIN_SESSION, adminOpt.get());
 
-			return "admin";
+			return "index";
 		}
 		if (myAuthorities.contains(MODERATOR_ROLE)) {
 			Optional<Moderator> moderatorOpt;
@@ -85,7 +85,7 @@ public class HomeController {
 			moderatorOpt = moderatorRepository.findModeratorByUserId(loggedUserOpt.get().getId());
 			request.getSession().setAttribute(MODERATOR_SESSION, moderatorOpt.get());
 
-			return "moderator";
+			return "index";
 		}
 		if (myAuthorities.contains(REGULAR_USER_ROLE)) {
 			Optional<RegularUser> regularUserOpt;
