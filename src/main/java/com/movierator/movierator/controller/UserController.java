@@ -21,6 +21,7 @@ import com.movierator.movierator.model.Authority;
 import com.movierator.movierator.model.RegularUser;
 import com.movierator.movierator.model.User;
 import com.movierator.movierator.repository.AdminRepository;
+import com.movierator.movierator.repository.MediaRatingRepository;
 import com.movierator.movierator.repository.ModeratorRepository;
 import com.movierator.movierator.repository.RegularUserRepository;
 import com.movierator.movierator.repository.UserRepository;
@@ -36,6 +37,9 @@ public class UserController {
 
 	@Autowired
 	UserRepository userRepository;
+	
+	@Autowired
+	MediaRatingRepository mediaRatingRepository;
 
 	@Autowired
 	AdminRepository adminRepository;
@@ -153,17 +157,20 @@ public class UserController {
 		return mv;
 	}
 
-	@RequestMapping("/delete/{id}")
+	@RequestMapping("/user/delete/{id}")
 	public ModelAndView deleteUser(@PathVariable("id") long id) {
-
+		
 		User user = userRepository.findById(id)
 				.orElseThrow(() -> new IllegalArgumentException("Invalid user Id:" + id));
-
+		
 		user.setActive(0);
 		userRepository.save(user);
+		
+		// removing all media ratings assigned to the user
+		mediaRatingRepository.deleteAll(user.getMediaRatings());
 
 		ModelAndView mv = new ModelAndView();
-		mv.setViewName("redirect:/");
+		mv.setViewName("redirect:/login");
 		mv.addObject("user deleted", "User deleted!");
 
 		return mv;

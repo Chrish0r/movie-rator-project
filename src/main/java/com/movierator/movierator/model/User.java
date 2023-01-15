@@ -2,8 +2,8 @@ package com.movierator.movierator.model;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 import javax.persistence.Column;
 import javax.persistence.Convert;
@@ -15,6 +15,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
@@ -66,6 +67,10 @@ public class User implements Serializable {
 			inverseJoinColumns = @JoinColumn(name="authority_id")
 			)
 	private List<Authority> myAuthorities = new ArrayList<Authority>();
+	
+	@OneToMany(mappedBy = "user")
+	private List<MediaRating> mediaRatings = new ArrayList<>();
+
 	
 	public User() {
 		
@@ -126,4 +131,31 @@ public class User implements Serializable {
 	public void setBirthday(String birthday) {
 		this.birthday = birthday;
 	}
+
+	public List<MediaRating> getMediaRatings() {
+		return mediaRatings;
+	}
+
+	public void setMediaRatings(List<MediaRating> mediaRatings) {
+		this.mediaRatings = mediaRatings;
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if (obj == this) {
+			return true;
+		}
+		if (!(obj instanceof User)) {
+			return false;
+		}
+			
+		User other = (User) obj;
+		return this.getId() == other.getId();
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(TABLE, this.getId());
+	}
+	
 }
