@@ -1,5 +1,6 @@
 package com.movierator.movierator.repository;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.Modifying;
@@ -22,8 +23,8 @@ public interface MediaRatingRepository extends CrudRepository<MediaRating, Long>
 
 	@Transactional
 	@Modifying
-	@Query("UPDATE MediaRating r SET r.reviewText = :reviewText, r.rating = :rating WHERE r.user = :user AND r.mediaId = :mediaId")
+	@Query("UPDATE MediaRating r SET r.reviewText = :reviewText, r.rating = :rating, r.lastModifiedAt = :date WHERE r.user = :user AND r.mediaId = :mediaId")
 	void updateReviewTextAndRatingByUserNameAndMediaId(@Param("reviewText") String reviewText,
-			@Param("rating") int rating, @Param("user") User user, @Param("mediaId") long mediaId);
+			@Param("rating") int rating, @Param("date") Date date, @Param("user") User user, @Param("mediaId") long mediaId);
 	
 }

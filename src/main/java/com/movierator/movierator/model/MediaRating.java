@@ -1,6 +1,7 @@
 package com.movierator.movierator.model;
 
 import java.io.Serializable;
+import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -12,6 +13,8 @@ import javax.persistence.Index;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.validation.constraints.DecimalMax;
 import javax.validation.constraints.DecimalMin;
 
@@ -34,6 +37,14 @@ public class MediaRating implements Serializable {
 
 	@Column(columnDefinition = "TEXT")
 	private String reviewText;
+	
+	@Column(nullable = false, updatable = false, name = "created_at")
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date createdAt;
+
+	@Column(nullable = false, updatable = true, name = "last_modified_at")
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date lastModifiedAt;
 
 	@ManyToOne(optional = false, targetEntity = User.class, fetch = FetchType.EAGER)
 	@JoinColumn(name = "user_id")
@@ -78,5 +89,20 @@ public class MediaRating implements Serializable {
 	public void setUser(User user) {
 		this.user = user;
 	}
-	
+
+	public Date getCreatedAt() {
+		return createdAt;
+	}
+
+	public void setCreatedAt(Date createdAt) {
+		this.createdAt = createdAt;
+	}
+
+	public Date getLastModifiedAt() {
+		return lastModifiedAt;
+	}
+
+	public void setLastModifiedAt(Date lastModifiedAt) {
+		this.lastModifiedAt = lastModifiedAt;
+	}
 }

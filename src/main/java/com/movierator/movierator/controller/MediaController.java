@@ -1,6 +1,7 @@
 package com.movierator.movierator.controller;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
@@ -72,7 +73,6 @@ public class MediaController {
 			return "edit-review";
 		}
 
-		
 		boolean hasUserAlreadyReviewed = false;
 
 		if (media.isEmpty()) {
@@ -115,6 +115,7 @@ public class MediaController {
 	public String validateAndStoreReview(@PathVariable long id, Review review, Model model) {
 		String userName = SecurityContextHolder.getContext().getAuthentication().getName();
 		Optional<User> userOpt = userRepository.findUserByLogin(userName);
+		Date dateToInsert = new Date();
 
 		if (!userOpt.isPresent()) {
 			logger.warn("The user with the user name " + userName + " does not exist!");
@@ -127,6 +128,8 @@ public class MediaController {
 		mediaRating.setRating(review.getRating());
 		mediaRating.setReviewText(review.getReviewText());
 		mediaRating.setUser(userOpt.get());
+		mediaRating.setCreatedAt(dateToInsert);
+		mediaRating.setLastModifiedAt(dateToInsert);
 
 		mediaRatingRepository.save(mediaRating);
 
@@ -159,7 +162,7 @@ public class MediaController {
 		}
 
 		mediaRatingRepository.updateReviewTextAndRatingByUserNameAndMediaId(review.getReviewText(), review.getRating(),
-				userOpt.get(), id);
+				new Date(), userOpt.get(), id);
 
 		return "redirect:/media/{id}";
 	}
