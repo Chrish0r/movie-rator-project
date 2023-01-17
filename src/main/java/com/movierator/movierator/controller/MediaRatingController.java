@@ -1,8 +1,11 @@
 package com.movierator.movierator.controller;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+
+import javax.validation.Valid;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,17 +13,27 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.movierator.movierator.controller.formObjects.Review;
+import com.movierator.movierator.controller.formObjects.MediaRatingByUserSearchResult;
 import com.movierator.movierator.controller.formObjects.SearchTerm;
 import com.movierator.movierator.model.MediaRating;
+import com.movierator.movierator.model.RegularUser;
 import com.movierator.movierator.model.User;
 import com.movierator.movierator.repository.MediaRatingRepository;
 import com.movierator.movierator.repository.UserRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 
 @Controller
 public class MediaRatingController {
@@ -37,29 +50,37 @@ public class MediaRatingController {
 	public String searchReviews(@RequestParam(name = "searchTerm") String userName, Model model) {
 		// interested only in the ten latest reviews
 		int limit = 10;
+		Pageable pageable = PageRequest.of(0, limit, Sort.by("lastModifiedAt").descending());
+		
 		Optional<User> userFoundOpt = userRepository.findUserByLogin(userName);
 		
 		if(!userFoundOpt.isPresent() || userFoundOpt.get().getActive() != 1) {
 			logger.warn("The user with the user name " + userName + " does not exist!");
 			// TODO alert-notification or user-not-found-page
-			return "/";
+			return "user-not-found";
 		}
 		
 		if(userFoundOpt.get().getMediaRatings() == null || userFoundOpt.get().getMediaRatings().isEmpty()) {
 			logger.warn("The user with the user name " + userName + " does not have any reviews yet");
 			// TODO alert-notification or no-reviews-found-page
-			return "/";
+			return "reviews-not-found";
 		}
 			
 		// limited to ten latest reviews
-		List<MediaRating> mediaRatings = mediaRatingRepository.getMediaRatingsByUserLimitedTo(userFoundOpt.get())
-				;
+		List<MediaRating> foundMediaRatings = mediaRatingRepository.getMediaRatingsByUserLimitedTo(userFoundOpt.get(), pageable);
+//		List<MediaRating> mediaRatings = mediaRatingRepository.getMediaRatingsByUserLimitedTo(userFoundOpt.get(), limit);
+		logger.info("The user with the user name " + userName + " has published " + foundMediaRatings.size() + " reviews");	
 		// To show the search term on the result page it has to be passed as attribute
-		SearchTerm searchTerm = new SearchTerm(userName);
-		model.addAttribute("searchTerm", searchTerm);
-
-		return "media-search-result";
+		List<MediaRatingByUserSearchResult> results = new ArrayList<MediaRatingByUserSearchResult>(foundMediaRatings.size());
+		
+		for(MediaRating mediaRating : foundMediaRatings) {
+			results.add(new MediaRatingByUserSearchResult(mediaRating.getRating(), mediaRating.getReviewText(), mediaRating.getLastModifiedAt()));
+		}
+		model.addAttribute("results", results);
+		
+		return "reviews-search-result";
 	}
+
 
 	@PostMapping("/review/{id}")
 	public String validateAndStoreReview(@PathVariable long id, Review review, Model model) {

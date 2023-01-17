@@ -12,6 +12,13 @@ import org.springframework.transaction.annotation.Transactional;
 import com.movierator.movierator.model.MediaRating;
 import com.movierator.movierator.model.User;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.PagingAndSortingRepository;
+import org.springframework.stereotype.Repository;
+
 public interface MediaRatingRepository extends CrudRepository<MediaRating, Long> {
 	List<MediaRating> getByMediaId(Long mediaId);
 
@@ -28,12 +35,11 @@ public interface MediaRatingRepository extends CrudRepository<MediaRating, Long>
 			@Param("rating") int rating, @Param("date") Date date, @Param("user") User user,
 			@Param("mediaId") long mediaId);
 	
-	/**
-	 * 
-	 * @param user
-	 * @return
-	 */
-	@Query("SELECT r FROM MediaRating r WHERE r.user = :user ORDER BY r.lastModifiedAt DESC")
-	List<MediaRating> getMediaRatingsByUserLimitedTo(User user);
+
+	@Query("SELECT r FROM MediaRating r WHERE r.user = :user")
+	List<MediaRating> getMediaRatingsByUserLimitedTo(User user, Pageable pageable);
+	
+//	@Query(value = "SELECT r FROM MediaRating r WHERE r.user = :user ORDER BY r.lastModifiedAt DESC LIMIT :limit", nativeQuery = true)
+//	List<MediaRating> getMediaRatingsByUserLimitedTo(User user, int limit);
 
 }

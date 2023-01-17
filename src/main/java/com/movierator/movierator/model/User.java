@@ -23,17 +23,10 @@ import javax.validation.constraints.Size;
 
 import com.movierator.movierator.service.AttributeEncryptor;
 
-/**
- * This class is representing the entity {@link User} with its various attributes.
- * The user also represents the credential entity regarding the log-in, i.e. authorization process.
- * 
- * @author Przemyslaw Christof Gadek
- */
-
 @Entity
 @Table(name = User.TABLE)
 public class User implements Serializable {
-	
+
 	private static final long serialVersionUID = -6853534067306206163L;
 
 	public static final String TABLE = "users";
@@ -41,19 +34,19 @@ public class User implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	
+
 	@NotEmpty(message = "User name is mandatory")
-	@Column(name = "user_name" , unique = true)
+	@Column(name = "user_name", unique = true)
 	private String login;
-	
+
 	@Email(message = "No valid email-address")
 	@NotEmpty(message = "Email is mandatory")
 	private String email;
-	
+
 	@NotEmpty(message = "Password is mandatory")
 	@Size(min = 4, message = "Password must contain at least 4 characters")
 	private String password;
-	
+
 	private Integer active;
 
 	@Column(columnDefinition = "varchar(255)")
@@ -61,21 +54,16 @@ public class User implements Serializable {
 	private String birthday;
 
 	@ManyToMany(fetch = FetchType.EAGER)
-	@JoinTable(
-			name="users_authorities",
-			joinColumns = @JoinColumn(name="user_id"),
-			inverseJoinColumns = @JoinColumn(name="authority_id")
-			)
+	@JoinTable(name = "users_authorities", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "authority_id"))
 	private List<Authority> myAuthorities = new ArrayList<Authority>();
-	
+
 	@OneToMany(mappedBy = "user")
 	private List<MediaRating> mediaRatings = new ArrayList<>();
 
-	
 	public User() {
-		
+
 	}
-	
+
 	public Long getId() {
 		return id;
 	}
@@ -99,7 +87,7 @@ public class User implements Serializable {
 	public void setPassword(String password) {
 		this.password = password;
 	}
-	
+
 	public Integer getActive() {
 		return active;
 	}
@@ -139,7 +127,7 @@ public class User implements Serializable {
 	public void setMediaRatings(List<MediaRating> mediaRatings) {
 		this.mediaRatings = mediaRatings;
 	}
-	
+
 	@Override
 	public boolean equals(Object obj) {
 		if (obj == this) {
@@ -148,7 +136,7 @@ public class User implements Serializable {
 		if (!(obj instanceof User)) {
 			return false;
 		}
-			
+
 		User other = (User) obj;
 		return this.getId() == other.getId();
 	}
@@ -157,5 +145,5 @@ public class User implements Serializable {
 	public int hashCode() {
 		return Objects.hash(TABLE, this.getId());
 	}
-	
+
 }

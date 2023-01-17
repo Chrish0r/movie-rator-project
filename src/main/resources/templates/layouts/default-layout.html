@@ -57,65 +57,61 @@
 	<div class="container">
 		<div class="d-flex bd-highlight mb-3">
 			<div layout:fragment="header">
-					<div sec:authorize="hasAuthority('REGULAR_USER')">
-						<h4
-							th:text="#{hello} + ' ' + ${session.regularUserSession.user.login}">
-						</h4>
-					</div>
+				<div sec:authorize="hasAuthority('REGULAR_USER')">
+					<h4
+						th:text="#{hello} + ' ' + ${session.regularUserSession.user.login}">
+					</h4>
+				</div>
 
-					<div sec:authorize="hasAuthority('ADMIN')">
-						<h4 th:text="#{hello} + ' Admin'"></h4>
-					</div>
+				<div sec:authorize="hasAuthority('ADMIN')">
+					<h4 th:text="#{hello} + ' Admin'"></h4>
+				</div>
 
-					<div sec:authorize="hasAuthority('MODERATOR')">
-						<h4 th:text="#{hello} + ' Moderator'"></h4>
-					</div>
+				<div sec:authorize="hasAuthority('MODERATOR')">
+					<h4 th:text="#{hello} + ' Moderator'"></h4>
+				</div>
 
-					<nav class="navbar navbar-expand-lg navbar-light bg-light">
-						<div class="collapse navbar-collapse" id="navbarSupportedContent">
-							<ul class="navbar-nav mr-auto">
-								<li class="nav-item active"><a class="nav-link"
-									th:href="@{/}">Home</a></li>
+				<nav class="navbar navbar-expand-lg navbar-light bg-light">
+					<div class="collapse navbar-collapse" id="navbarSupportedContent">
+						<ul class="navbar-nav mr-auto">
+							<li class="nav-item active"><a class="nav-link"
+								th:href="@{/}">Home</a></li>
 
-								<li><a sec:authorize="hasAuthority('REGULAR_USER')"
-									class="nav-link"
-									th:href="@{/user/update/{id}(id=${session.regularUserSession.user.id})}"
-									th:text="#{update_email}"></a></li>
-									
-								<li><a sec:authorize="hasAuthority('REGULAR_USER')"
-									class="nav-link"
-									th:href="@{/user/delete/{id}(id=${session.regularUserSession.user.id})}"
-									th:text="#{delete_account}"></a></li>
+							<li><a sec:authorize="hasAuthority('ADMIN')"
+								class="nav-link" th:href="@{/}" th:text="#{show_users}"></a></li>
 
-								<li><a sec:authorize="hasAuthority('ADMIN')"
-									class="nav-link" th:href="@{/}" th:text="#{show_users}"></a></li>
-
-								<!--  TODO: Fix dropdown menu -->
-								<li class="nav-item dropdown" sec:authorize="isAuthenticated()"><a
-									class="nav-link dropdown-toggle" href="#" id="navbarDropdown"
-									role="button" data-toggle="dropdown" aria-haspopup="true"
-									aria-expanded="true"> Account </a>
-									<div class="dropdown-menu" aria-labelledby="navbarDropdown">
-										<a sec:authorize="hasAuthority('REGULAR_USER')"
-											class="dropdown-item"
+							<li sec:authorize="hasAuthority('REGULAR_USER')">
+								<div class="dropdown">
+									<button class="btn btn-secondary dropdown-toggle" type="button"
+										data-bs-toggle="dropdown" aria-expanded="false">
+										Account</button>
+									<ul class="dropdown-menu">
+										<li><a 
+											class="nav-link"
 											th:href="@{/user/update/{id}(id=${session.regularUserSession.user.id})}"
-											th:text="#{update_email}"></a>
-										<div class="dropdown-divider"></div>
-										<a class="dropdown-item" href="#">Something else here</a>
-									</div></li>
+											th:text="#{update_email}"></a></li>
 
-								<li><a sec:authorize="isAuthenticated()" class="nav-link"
-									th:href="@{/logout}">Logout</a></li>
+										<li><a 
+											class="nav-link"
+											th:href="@{/user/delete/{id}(id=${session.regularUserSession.user.id})}"
+											th:text="#{delete_account}"></a></li>
+									</ul>
+								</div>
+							</li>
 
-								<li><a style="margin-right: 10px;"
-									sec:authorize="isAnonymous()" class="btn btn-success"
-									th:href="@{/login}">Login</a></li>
-								<li><a style="margin-right: 10px;"
-									sec:authorize="isAnonymous()" class="btn btn-primary"
-									th:href="@{/user/add}">Register</a></li>
-							</ul>
-						</div>
-					</nav>
+
+							<li><a sec:authorize="isAuthenticated()" class="nav-link"
+								th:href="@{/logout}">Logout</a></li>
+
+							<li><a style="margin-right: 10px;"
+								sec:authorize="isAnonymous()" class="btn btn-success"
+								th:href="@{/login}">Login</a></li>
+							<li><a style="margin-right: 10px;"
+								sec:authorize="isAnonymous()" class="btn btn-primary"
+								th:href="@{/user/add}">Register</a></li>
+						</ul>
+					</div>
+				</nav>
 			</div>
 			<div layout:fragment="languageSelector">
 				<div class="ms-auto p-2 bd-highlight">

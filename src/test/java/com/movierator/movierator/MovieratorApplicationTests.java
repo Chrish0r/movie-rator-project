@@ -15,12 +15,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.movierator.movierator.model.User;
 import com.movierator.movierator.test.UserRestAPITester;
 
-/**
- * This class is responsible for testing methods by using JUnit Framework. The
- * idea is to use the black-box-concept in regard to testing.
- *
- * @author Przemyslaw Christof Gadek
- */
 @SpringBootTest
 class MovieratorApplicationTests {
 	private final Logger logger = LoggerFactory.getLogger(this.getClass());
