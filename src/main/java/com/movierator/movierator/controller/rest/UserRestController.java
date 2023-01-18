@@ -24,6 +24,7 @@ import com.movierator.movierator.model.Authority;
 import com.movierator.movierator.model.RegularUser;
 import com.movierator.movierator.model.User;
 import com.movierator.movierator.repository.AdminRepository;
+import com.movierator.movierator.repository.MediaRatingRepository;
 import com.movierator.movierator.repository.ModeratorRepository;
 import com.movierator.movierator.repository.RegularUserRepository;
 import com.movierator.movierator.repository.UserRepository;
@@ -40,6 +41,9 @@ public class UserRestController {
 
 	@Autowired
 	UserRepository userRepository;
+	
+	@Autowired
+	MediaRatingRepository mediaRatingRepository;
 
 	@Autowired
 	AdminRepository adminRepository;
@@ -73,13 +77,20 @@ public class UserRestController {
 
 	@GetMapping("/{id}")
 	public ResponseEntity<User> getUserById(@PathVariable("id") long id) {
-		Optional<User> userOpt = userRepository.findById(id);
+		logger.info("Processing getting user by id with PUT");
+		
+		try {
+			Optional<User> userOpt = userRepository.findById(id);
 
-		if (userOpt.isPresent()) {
-			return new ResponseEntity<>(userOpt.get(), HttpStatus.OK);
-		} else {
-			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+			if (userOpt.isPresent()) {
+				return new ResponseEntity<>(userOpt.get(), HttpStatus.OK);
+			} else {
+				return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+			}
+		} catch (Exception e) {
+			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
+	
 	}
 
 	@PostMapping("/")

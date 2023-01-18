@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 import org.slf4j.Logger;
@@ -18,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.movierator.movierator.model.Authority;
+import com.movierator.movierator.model.MediaRating;
 import com.movierator.movierator.model.RegularUser;
 import com.movierator.movierator.model.User;
 import com.movierator.movierator.repository.AdminRepository;
@@ -104,7 +107,7 @@ public class UserController {
 		regularUserRepository.save(regularUserForm);
 
 		mv.addObject("useradded", "User added!");
-		mv.setViewName("redirect:/login");
+		mv.setViewName("user/user-sign-up-success");
 
 		return mv;
 	}
@@ -158,21 +161,28 @@ public class UserController {
 	}
 
 	@RequestMapping("/user/delete/{id}")
-	public ModelAndView deleteUser(@PathVariable("id") long id) {
+	public ModelAndView deleteUser(@PathVariable("id") long id, HttpServletRequest request) {
 		
 		User user = userRepository.findById(id)
 				.orElseThrow(() -> new IllegalArgumentException("Invalid user Id:" + id));
+		
+		List<MediaRating> mediaRatings = mediaRatingRepository.getMediaRatingsByUser(user);
 		
 		user.setActive(0);
 		userRepository.save(user);
 		
 		// removing all media ratings assigned to the user
-		mediaRatingRepository.deleteAll(user.getMediaRatings());
+		mediaRatingRepository.deleteAll(mediaRatings);
+//		mediaRatingRepository.deleteAll(user.getMediaRatings());
+		
+//		// terminating current session
+		HttpSession session = request.getSession();
+	    session.invalidate();
 
 		ModelAndView mv = new ModelAndView();
-		mv.setViewName("redirect:/login");
+		mv.setViewName("user/user-account-deleted");
 		mv.addObject("user deleted", "User deleted!");
-
+		
 		return mv;
 	}
 }

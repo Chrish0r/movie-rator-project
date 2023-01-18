@@ -35,7 +35,9 @@ public interface MediaRatingRepository extends CrudRepository<MediaRating, Long>
 			@Param("rating") int rating, @Param("date") Date date, @Param("user") User user,
 			@Param("mediaId") long mediaId);
 	
-
+	@Query("SELECT r FROM MediaRating r WHERE r.user = :user")
+	List<MediaRating> getMediaRatingsByUser(User user);
+	
 	@Query("SELECT r FROM MediaRating r WHERE r.user = :user")
 	List<MediaRating> getMediaRatingsByUserLimitedTo(User user, Pageable pageable);
 	

@@ -57,8 +57,8 @@ public class User implements Serializable {
 	@JoinTable(name = "users_authorities", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "authority_id"))
 	private List<Authority> myAuthorities = new ArrayList<Authority>();
 
-	@OneToMany(mappedBy = "user")
-	private List<MediaRating> mediaRatings = new ArrayList<>();
+//	@OneToMany(mappedBy = "user")
+//	private List<MediaRating> mediaRatings = new ArrayList<>();
 
 	public User() {
 
@@ -120,13 +120,13 @@ public class User implements Serializable {
 		this.birthday = birthday;
 	}
 
-	public List<MediaRating> getMediaRatings() {
-		return mediaRatings;
-	}
-
-	public void setMediaRatings(List<MediaRating> mediaRatings) {
-		this.mediaRatings = mediaRatings;
-	}
+//	public List<MediaRating> getMediaRatings() {
+//		return mediaRatings;
+//	}
+//
+//	public void setMediaRatings(List<MediaRating> mediaRatings) {
+//		this.mediaRatings = mediaRatings;
+//	}
 
 	@Override
 	public boolean equals(Object obj) {
