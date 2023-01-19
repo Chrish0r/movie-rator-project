@@ -15,7 +15,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
@@ -57,6 +56,14 @@ public class User implements Serializable {
 	@JoinTable(name = "users_authorities", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "authority_id"))
 	private List<Authority> myAuthorities = new ArrayList<Authority>();
 
+	/*
+	 * referencing annotation must be removed, otherwise issues will be caused
+	 * regarding providing the application as a RestAPI, because an infinite
+	 * referencing loop will result in a stack overflow exception. This means that
+	 * only one of the both interdependent entities {@link User} and {@link
+	 * MediaRating} can be referenced by annotation.
+	 * 
+	 */
 //	@OneToMany(mappedBy = "user")
 //	private List<MediaRating> mediaRatings = new ArrayList<>();
 
@@ -119,14 +126,6 @@ public class User implements Serializable {
 	public void setBirthday(String birthday) {
 		this.birthday = birthday;
 	}
-
-//	public List<MediaRating> getMediaRatings() {
-//		return mediaRatings;
-//	}
-//
-//	public void setMediaRatings(List<MediaRating> mediaRatings) {
-//		this.mediaRatings = mediaRatings;
-//	}
 
 	@Override
 	public boolean equals(Object obj) {

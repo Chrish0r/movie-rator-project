@@ -33,10 +33,17 @@ public class MediaRatingRestController {
 	@Autowired
 	MediaRatingRepository mediaRatingRepository;
 
+	/**
+	 * 
+	 * @param id user id of the user being searched for
+	 * 
+	 * @return HTTP response showing the ten most recent ratings from the relevant
+	 *         user in JSON format
+	 */
 	@GetMapping("/{id}")
 	public ResponseEntity<List<MediaRating>> getMediaRatingsByUserId(@PathVariable("id") long id) {
 
-		// interested only in the ten latest reviews
+		// limited to the ten latest reviews
 		int limit = 10;
 		Pageable pageable = PageRequest.of(0, limit, Sort.by("lastModifiedAt").descending());
 
@@ -63,6 +70,5 @@ public class MediaRatingRestController {
 		} catch (Exception e) {
 			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
-
 	}
 }

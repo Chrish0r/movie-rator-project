@@ -72,12 +72,10 @@ public class UserController {
 			BindingResult bindingResult) {
 
 		ModelAndView mv = new ModelAndView();
-
 		if (bindingResult.hasErrors()) {
 			mv.setViewName("/user/user-regular-user-add");
 			return mv;
 		}
-
 		Optional<User> userDB = userRepository.findUserByLogin(regularUserForm.getUser().getLogin());
 
 		if (userDB.isPresent()) {
@@ -89,11 +87,9 @@ public class UserController {
 		}
 
 		User user = regularUserForm.getUser();
-
 		user.setPassword((passwordEncoder.encode(regularUserForm.getUser().getPassword())));
 
 		List<Authority> myAuthorities = new ArrayList<Authority>();
-
 		myAuthorities.add(new Authority(Constants.AUTHORITY_REGULAR_USER));
 
 		user.setMyAuthorities(myAuthorities);
@@ -166,16 +162,18 @@ public class UserController {
 		User user = userRepository.findById(id)
 				.orElseThrow(() -> new IllegalArgumentException("Invalid user Id:" + id));
 		
-		List<MediaRating> mediaRatings = mediaRatingRepository.getMediaRatingsByUser(user);
+//		List<MediaRating> mediaRatings = mediaRatingRepository.getMediaRatingsByUser(user);
 		
 		user.setActive(0);
 		userRepository.save(user);
 		
+		// loading of all ratings assigned to the respective user from the database
+		List<MediaRating> mediaRatings = mediaRatingRepository.getMediaRatingsByUser(user);
+		
 		// removing all media ratings assigned to the user
 		mediaRatingRepository.deleteAll(mediaRatings);
-//		mediaRatingRepository.deleteAll(user.getMediaRatings());
 		
-//		// terminating current session
+		// terminating current session
 		HttpSession session = request.getSession();
 	    session.invalidate();
 

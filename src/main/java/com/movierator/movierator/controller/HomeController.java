@@ -77,7 +77,6 @@ public class HomeController {
 			adminOpt = adminRepository.findAdminByUserId(loggedUserOpt.get().getId());
 			request.getSession().setAttribute(ADMIN_SESSION, adminOpt.get());
 
-			return "index";
 		}
 		if (myAuthorities.contains(MODERATOR_ROLE)) {
 			Optional<Moderator> moderatorOpt;
@@ -85,7 +84,6 @@ public class HomeController {
 			moderatorOpt = moderatorRepository.findModeratorByUserId(loggedUserOpt.get().getId());
 			request.getSession().setAttribute(MODERATOR_SESSION, moderatorOpt.get());
 
-			return "index";
 		}
 		if (myAuthorities.contains(REGULAR_USER_ROLE)) {
 			Optional<RegularUser> regularUserOpt;
@@ -93,9 +91,8 @@ public class HomeController {
 			regularUserOpt = regularUserRepository.findRegularUserByUserId(loggedUserOpt.get().getId());
 			request.getSession().setAttribute(REGULAR_USER_SESSION, regularUserOpt.get());
 
-			return "index";
 		}
-
+		
 		return "index";
 	}
 }

@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import javax.servlet.http.HttpSession;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.movierator.movierator.model.Authority;
+import com.movierator.movierator.model.MediaRating;
 import com.movierator.movierator.model.RegularUser;
 import com.movierator.movierator.model.User;
 import com.movierator.movierator.repository.AdminRepository;
@@ -41,7 +44,7 @@ public class UserRestController {
 
 	@Autowired
 	UserRepository userRepository;
-	
+
 	@Autowired
 	MediaRatingRepository mediaRatingRepository;
 
@@ -78,7 +81,7 @@ public class UserRestController {
 	@GetMapping("/{id}")
 	public ResponseEntity<User> getUserById(@PathVariable("id") long id) {
 		logger.info("Processing getting user by id with PUT");
-		
+
 		try {
 			Optional<User> userOpt = userRepository.findById(id);
 
@@ -90,7 +93,7 @@ public class UserRestController {
 		} catch (Exception e) {
 			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
-	
+
 	}
 
 	@PostMapping("/")
@@ -105,6 +108,8 @@ public class UserRestController {
 		userDB.setLogin(user.getLogin());
 		userDB.setEmail(user.getEmail());
 		userDB.setActive(1);
+		// birthday will be only automatically encrypted when it is stored into the database
+		userDB.setBirthday(user.getBirthday());
 
 		regularUserDB.setUser(userDB);
 
@@ -161,6 +166,13 @@ public class UserRestController {
 		try {
 			// Updating i.e., persisting user into the database
 			userRepository.save(user);
+
+			// loading of all ratings assigned to the respective user from the database
+			List<MediaRating> mediaRatings = mediaRatingRepository.getMediaRatingsByUser(user);
+
+			// removing all media ratings assigned to the user
+			mediaRatingRepository.deleteAll(mediaRatings);
+
 			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 		} catch (Exception e) {
 			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);

@@ -38,9 +38,18 @@ public class MediaRatingController {
 	@Autowired
 	UserRepository userRepository;
 
+	/**
+	 * 
+	 * @param userName represents the user name that is being searched for
+	 * @param model    makes it possible to carry or insert objects between view and
+	 *                 controller
+	 * 
+	 * @return view showing the ten most recent ratings from the relevant user
+	 * 
+	 */
 	@GetMapping("/search-reviews")
 	public String searchReviewsByUser(@RequestParam(name = "searchTerm") String userName, Model model) {
-		// interested only in the ten latest reviews
+		// limited to ten latest reviews
 		int limit = 10;
 		Pageable pageable = PageRequest.of(0, limit, Sort.by("lastModifiedAt").descending());
 
@@ -51,23 +60,18 @@ public class MediaRatingController {
 			return "user/user-not-found";
 		}
 
-//		if (userFoundOpt.get().getMediaRatings() == null || userFoundOpt.get().getMediaRatings().isEmpty()) {
-//			logger.warn("The user with the user name " + userName + " does not have any reviews yet");
-//			return "reviews-not-found";
-//		}
 
 		// limited to ten latest reviews
 		List<MediaRating> foundMediaRatings = mediaRatingRepository.getMediaRatingsByUserLimitedTo(userFoundOpt.get(),
 				pageable);
-//		List<MediaRating> mediaRatings = mediaRatingRepository.getMediaRatingsByUserLimitedTo(userFoundOpt.get(), limit);
 		logger.info(
 				"The user with the user name " + userName + " has published " + foundMediaRatings.size() + " reviews");
-		
+
 		if (foundMediaRatings == null || foundMediaRatings.isEmpty()) {
 			logger.warn("The user with the user name " + userName + " does not have any reviews yet");
 			return "reviews-not-found";
 		}
-		
+
 		// list of table items
 		List<MediaRatingByUserSearchResult> results = new ArrayList<MediaRatingByUserSearchResult>(
 				foundMediaRatings.size());

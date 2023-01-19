@@ -40,8 +40,4 @@ public interface MediaRatingRepository extends CrudRepository<MediaRating, Long>
 	
 	@Query("SELECT r FROM MediaRating r WHERE r.user = :user")
 	List<MediaRating> getMediaRatingsByUserLimitedTo(User user, Pageable pageable);
-	
-//	@Query(value = "SELECT r FROM MediaRating r WHERE r.user = :user ORDER BY r.lastModifiedAt DESC LIMIT :limit", nativeQuery = true)
-//	List<MediaRating> getMediaRatingsByUserLimitedTo(User user, int limit);
-
 }
