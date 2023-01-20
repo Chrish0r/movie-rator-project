@@ -76,8 +76,9 @@ public class UserController {
 			mv.setViewName("/user/user-regular-user-add");
 			return mv;
 		}
+		
+		// ensure uniqueness of user name
 		Optional<User> userDB = userRepository.findUserByLogin(regularUserForm.getUser().getLogin());
-
 		if (userDB.isPresent()) {
 			logger.warn("Login already exists!");
 
@@ -85,13 +86,25 @@ public class UserController {
 			mv.setViewName("/user/user-regular-user-add");
 			return mv;
 		}
+		
+		// ensure uniqueness of email
+		List<String> allExistingEmails = userRepository.findAllExistingEmails();
+		if(allExistingEmails != null && !allExistingEmails.isEmpty()) {
+			if(allExistingEmails.contains(regularUserForm.getUser().getEmail())) {
+				logger.warn("Email already exists!");
+
+				bindingResult.rejectValue("user.email", "error.user", "Email already exists");
+				mv.setViewName("/user/user-regular-user-add");
+				return mv;
+			}
+		}
 
 		User user = regularUserForm.getUser();
 		user.setPassword((passwordEncoder.encode(regularUserForm.getUser().getPassword())));
 
 		List<Authority> myAuthorities = new ArrayList<Authority>();
 		myAuthorities.add(new Authority(Constants.AUTHORITY_REGULAR_USER));
-
+		
 		user.setMyAuthorities(myAuthorities);
 		user.setActive(1);
 
