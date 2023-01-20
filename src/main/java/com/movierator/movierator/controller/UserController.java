@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -40,7 +41,7 @@ public class UserController {
 
 	@Autowired
 	UserRepository userRepository;
-	
+
 	@Autowired
 	MediaRatingRepository mediaRatingRepository;
 
@@ -76,7 +77,7 @@ public class UserController {
 			mv.setViewName("/user/user-regular-user-add");
 			return mv;
 		}
-		
+
 		// ensure uniqueness of user name
 		Optional<User> userDB = userRepository.findUserByLogin(regularUserForm.getUser().getLogin());
 		if (userDB.isPresent()) {
@@ -86,11 +87,11 @@ public class UserController {
 			mv.setViewName("/user/user-regular-user-add");
 			return mv;
 		}
-		
-		// ensure uniqueness of email
+
+		// ensuring uniqueness of email
 		List<String> allExistingEmails = userRepository.findAllExistingEmails();
-		if(allExistingEmails != null && !allExistingEmails.isEmpty()) {
-			if(allExistingEmails.contains(regularUserForm.getUser().getEmail())) {
+		if (allExistingEmails != null && !allExistingEmails.isEmpty()) {
+			if (allExistingEmails.contains(regularUserForm.getUser().getEmail())) {
 				logger.warn("Email already exists!");
 
 				bindingResult.rejectValue("user.email", "error.user", "Email already exists");
@@ -104,7 +105,7 @@ public class UserController {
 
 		List<Authority> myAuthorities = new ArrayList<Authority>();
 		myAuthorities.add(new Authority(Constants.AUTHORITY_REGULAR_USER));
-		
+
 		user.setMyAuthorities(myAuthorities);
 		user.setActive(1);
 
@@ -146,19 +147,42 @@ public class UserController {
 			BindingResult bindingResult) {
 
 		ModelAndView mv = new ModelAndView();
-		
-//		// TODO limit to email field only
-//		if (bindingResult.hasErrors()) {
-//			logger.warn(bindingResult.toString());
-//			mv.setViewName("/user/user-regular-user-update");
-//			return mv;
-//		}
-
-		logger.info("Processing the update of the regular user with the id " + regularUserForm.getId());
-
 		User userForm = regularUserForm.getUser();
 		// load user from database
 		User userDB = userRepository.findById(userForm.getId()).get();
+		// before updating email
+		String currentEmail = userDB.getEmail();
+		
+		// limited to email field
+		if (bindingResult.hasFieldErrors("user.email")) {
+			logger.warn(bindingResult.toString());
+			mv.setViewName("/user/user-regular-user-update");
+			return mv;
+		}
+
+		// ensuring uniqueness of email
+		List<String> allExistingEmails = userRepository.findAllExistingEmails();
+		if(allExistingEmails != null && !allExistingEmails.isEmpty()) {
+			
+			if(currentEmail.equals(regularUserForm.getUser().getEmail())) {
+				logger.warn("Already current email!");
+
+				bindingResult.rejectValue("user.email", "error.user", "This is already your current email");
+				mv.setViewName("/user/user-regular-user-update");
+				return mv;
+			}
+			
+			if(allExistingEmails.contains(regularUserForm.getUser().getEmail())) {
+				logger.warn("Email already exists!");
+
+				bindingResult.rejectValue("user.email", "error.user", "Email already exists");
+				mv.setViewName("/user/user-regular-user-update");
+				return mv;
+			}
+		}
+		
+		logger.info("Processing the update of the regular user with the id " + regularUserForm.getId());
+		// update email
 		userDB.setEmail(userForm.getEmail());
 
 		regularUserForm.setUser(userDB);
@@ -171,29 +195,29 @@ public class UserController {
 
 	@RequestMapping("/user/delete/{id}")
 	public ModelAndView deleteUser(@PathVariable("id") long id, HttpServletRequest request) {
-		
+
 		User user = userRepository.findById(id)
 				.orElseThrow(() -> new IllegalArgumentException("Invalid user Id:" + id));
-		
+
 //		List<MediaRating> mediaRatings = mediaRatingRepository.getMediaRatingsByUser(user);
-		
+
 		user.setActive(0);
 		userRepository.save(user);
-		
+
 		// loading of all ratings assigned to the respective user from the database
 		List<MediaRating> mediaRatings = mediaRatingRepository.getMediaRatingsByUser(user);
-		
+
 		// removing all media ratings assigned to the user
 		mediaRatingRepository.deleteAll(mediaRatings);
-		
+
 		// terminating current session
 		HttpSession session = request.getSession();
-	    session.invalidate();
+		session.invalidate();
 
 		ModelAndView mv = new ModelAndView();
 		mv.setViewName("user/user-account-deleted");
 		mv.addObject("user deleted", "User deleted!");
-		
+
 		return mv;
 	}
 }
