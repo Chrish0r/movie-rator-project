@@ -60,7 +60,7 @@ public class User implements Serializable {
 	 * referencing annotation must be removed, otherwise issues will be caused
 	 * regarding providing the application as a RestAPI, because an infinite
 	 * referencing loop will result in a stack overflow exception. This means that
-	 * only one of the both interdependent entities {@link User} and {@link
+	 * only one hof the both interdependent entities {@link User} and {@link
 	 * MediaRating} can be referenced by annotation.
 	 * 
 	 */

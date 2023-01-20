@@ -21,7 +21,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.movierator.movierator.controller.formObjects.MediaRatingByUserSearchResult;
 import com.movierator.movierator.controller.formObjects.Review;
-import com.movierator.movierator.controller.formObjects.SearchTerm;
 import com.movierator.movierator.model.MediaRating;
 import com.movierator.movierator.model.User;
 import com.movierator.movierator.repository.MediaRatingRepository;

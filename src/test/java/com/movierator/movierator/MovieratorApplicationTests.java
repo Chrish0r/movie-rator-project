@@ -12,7 +12,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.movierator.movierator.model.MediaRating;
 import com.movierator.movierator.model.User;
+import com.movierator.movierator.test.MediaRatingRestAPITester;
 import com.movierator.movierator.test.UserRestAPITester;
 
 @SpringBootTest
@@ -20,29 +22,41 @@ class MovieratorApplicationTests {
 	private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
 	@Autowired
-	public UserRestAPITester client;
+	public UserRestAPITester clientUser;
+	
+	@Autowired
+	public MediaRatingRestAPITester clientMediaRating;
 
 	@Test
 	public void userClientSuccessfullyReturnsUser() throws JsonProcessingException {
 
-		User userResponse = this.client.testGetUserAPI(5L);
+		User userResponse = this.clientUser.testGetUserAPI(5L);
 		logger.info("Obtained following user: " + userResponse.getLogin());
 
 		assertNotNull(userResponse);
 		// in this case the following test scenario in not required (from a logical
 		// point of view), but shown for demonstration purposes
-		assertEquals(userResponse.getLogin(), "max");
+		assertEquals(userResponse.getLogin(), "andy");
 	}
 
 	@Test
 	public void userClientSuccessfullyReturnsAllActiveUsers() throws JsonProcessingException {
 
-		List<User> userResponse = this.client.testGetAllActiveUsersRestAPI();
+		List<User> userResponse = this.clientUser.testGetAllActiveUsersRestAPI();
 
-		logger.info("Size of user-list regading active users only: " + userResponse.size());
+		logger.info("Size of user list regading active users only: " + userResponse.size());
 
 		assertNotNull(userResponse);
-
+	}
+	
+	@Test
+	public void mediaRatingClientSuccessfullyReturnsMediaRatings() throws JsonProcessingException {
+		
+		List<MediaRating> mediaRatingResponse = this.clientMediaRating.testGetMediaRatingsByUserIdRestAPI(1L);
+		
+		logger.info("Size of media rating list: " + mediaRatingResponse.size());
+		
+		assertNotNull(mediaRatingResponse);
 	}
 
 }

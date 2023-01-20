@@ -15,10 +15,10 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JSR310Module;
 import com.movierator.movierator.model.User;
 
+@SuppressWarnings("deprecation")
 @Component
 public class UserRestAPITester {
 	
@@ -43,6 +43,7 @@ public class UserRestAPITester {
 			      .getBody();
 	}
 	
+	@SuppressWarnings("unused")
 	public List<User> testGetAllActiveUsersRestAPI() {
 		
 		HttpHeaders headers = new HttpHeaders();
