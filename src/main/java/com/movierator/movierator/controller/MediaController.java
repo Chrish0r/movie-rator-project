@@ -68,11 +68,6 @@ public class MediaController {
 		String userName = SecurityContextHolder.getContext().getAuthentication().getName();
 		Optional<User> userOpt = userRepository.findUserByLogin(userName);
 
-		if (!userOpt.isPresent()) {
-			logger.warn("The user with the user name " + userName + " does not exist!");
-			return "edit-review";
-		}
-
 		boolean hasUserAlreadyReviewed = false;
 
 		if (media.isEmpty()) {

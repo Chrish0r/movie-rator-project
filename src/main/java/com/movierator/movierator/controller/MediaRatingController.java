@@ -91,11 +91,6 @@ public class MediaRatingController {
 		Optional<User> userOpt = userRepository.findUserByLogin(userName);
 		Date dateToInsert = new Date();
 
-		if (!userOpt.isPresent()) {
-			logger.warn("The user with the user name " + userName + " does not exist!");
-			return "edit-review";
-		}
-
 		MediaRating mediaRating = new MediaRating();
 
 		mediaRating.setMediaId(id);
