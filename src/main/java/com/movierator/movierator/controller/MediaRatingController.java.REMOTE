@@ -114,7 +114,6 @@ public class MediaRatingController {
 		long mediaId = optMedia.get().getMediaId();
 		mediaRatingRepository.deleteById(reviewId);
 		
-
 		deletedReviewEmailSenderService.sendConfirmationMailForDeletedReview(optMedia.get());
 		
 		return "redirect:/media/" + mediaId;

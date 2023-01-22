@@ -80,7 +80,7 @@ public class MediaRatingRestController {
 		Pageable pageable = PageRequest.of(0, limit, Sort.by("lastModifiedAt").descending());
 
 		try {
-			List<MediaRating> ratings = mediaRatingRepository.getMediaRatingsByMediaId(mediaId, pageable);
+			List<MediaRating> ratings = mediaRatingRepository.getMediaRatingsByMediaIdLimitedTo(mediaId, pageable);
 
 			logger.info("The media with the media id " + mediaId + " has " + ratings.size() + " reviews");
 

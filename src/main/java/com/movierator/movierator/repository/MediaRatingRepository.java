@@ -36,5 +36,5 @@ public interface MediaRatingRepository extends CrudRepository<MediaRating, Long>
 	List<MediaRating> getMediaRatingsByUserLimitedTo(User user, Pageable pageable);
 	
 	@Query("SELECT r from MediaRating r WHERE r.mediaId = :mediaId")
-	List<MediaRating> getMediaRatingsByMediaId(long mediaId, Pageable pageable);
+	List<MediaRating> getMediaRatingsByMediaIdLimitedTo(long mediaId, Pageable pageable);
 }
