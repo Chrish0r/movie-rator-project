@@ -25,6 +25,7 @@ import com.movierator.movierator.model.MediaRating;
 import com.movierator.movierator.model.User;
 import com.movierator.movierator.repository.MediaRatingRepository;
 import com.movierator.movierator.repository.UserRepository;
+import com.movierator.movierator.service.DeletedReviewEmailSenderService;
 
 @Controller
 public class MediaRatingController {
@@ -104,11 +105,14 @@ public class MediaRatingController {
 		return "redirect:/media/" + id;
 	}
 
-	@GetMapping("/deleteReview/{id}")
-	public String deleteReview(@RequestParam(name = "mediaId") long mediaId, @PathVariable long id) {
-
-		mediaRatingRepository.deleteById(id);
-
+	@GetMapping("/deleteReview/{reviewId}")
+	public String deleteReview(@PathVariable long reviewId) {
+		Optional<MediaRating> optMedia = mediaRatingRepository.findById(reviewId);
+		long mediaId = optMedia.get().getMediaId();
+		mediaRatingRepository.deleteById(reviewId);
+		
+		new DeletedReviewEmailSenderService().sendConfirmationMailForDeletedReview(optMedia.get());
+		
 		return "redirect:/media/" + mediaId;
 	}
 

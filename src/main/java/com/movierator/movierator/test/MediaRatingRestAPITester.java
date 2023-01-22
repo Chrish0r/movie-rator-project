@@ -17,6 +17,7 @@ import org.springframework.web.client.RestTemplate;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JSR310Module;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.movierator.movierator.model.MediaRating;
 import com.movierator.movierator.model.User;
 
@@ -56,5 +57,40 @@ public class MediaRatingRestAPITester {
 
 		return (List<MediaRating>) Arrays.stream(mediaRatings)
 				.map(object -> mapper.convertValue(object, MediaRating.class)).collect(Collectors.toList());
+	}
+	
+	public List<MediaRating> testGetMediaRatingsByMediaIdRestAPI(@PathVariable Long id) {
+
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_JSON);
+
+		ResponseEntity<MediaRating[]> responseEntity = restTemplate.getForEntity("http://localhost:8080/api/reviews/media/" + id,
+				MediaRating[].class);
+		MediaRating[] mediaRatings = responseEntity.getBody();
+
+		ObjectMapper mapper = new ObjectMapper();
+
+		mapper.registerModule(new JavaTimeModule());
+
+		return (List<MediaRating>) Arrays.stream(mediaRatings)
+				.map(object -> mapper.convertValue(object, MediaRating.class)).collect(Collectors.toList());
+	}
+	
+	public Float testGetAverageRatingsByMediaIdRestAPI(@PathVariable Long id) {
+
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_JSON);
+
+		HttpEntity<Void> requestEntity = new HttpEntity<>(headers);
+		
+		ResponseEntity<Float> responseEntity = restTemplate.getForEntity("http://localhost:8080/api/reviews/averageRating/" + id,
+				Float.class);
+		Float avgRating = responseEntity.getBody();
+
+		ObjectMapper mapper = new ObjectMapper();
+
+		mapper.registerModule(new JavaTimeModule());
+
+		return avgRating;
 	}
 }
