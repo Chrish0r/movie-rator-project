@@ -37,6 +37,9 @@ public class MediaRatingController {
 
 	@Autowired
 	UserRepository userRepository;
+	
+	@Autowired
+	DeletedReviewEmailSenderService deletedReviewEmailSenderService;
 
 	/**
 	 * 
@@ -111,7 +114,7 @@ public class MediaRatingController {
 		long mediaId = optMedia.get().getMediaId();
 		mediaRatingRepository.deleteById(reviewId);
 		
-		new DeletedReviewEmailSenderService().sendConfirmationMailForDeletedReview(optMedia.get());
+		deletedReviewEmailSenderService.sendConfirmationMailForDeletedReview(optMedia.get());
 		
 		return "redirect:/media/" + mediaId;
 	}
