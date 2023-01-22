@@ -18,6 +18,7 @@
 							<th class="border" scope="col" th:text="#{review}"></th>
 							<th class="border" scope="col" th:text="#{rating}"></th>
 							<th class="border" scope="col"></th>
+							<th class="border" scope="col"></th>
 						</tr>
 					</thead>
 					<tbody>
@@ -27,6 +28,13 @@
 							<td class="border" th:text="${userReview.rating}"></td>
 							<td class="border"><a class="btn btn-success"
 								th:href="${'/edit/'+ media.id}" th:text="#{edit}"></a></td>
+							<td class="border">
+								<form th:action="${'/deleteReview/' + userReview.id}"
+									method="get">
+									<button type="submit" class="btn btn-danger" name="mediaId"
+										 th:text="#{delete}"></button>
+								</form>
+							</td>
 						</tr>
 					</tbody>
 				</table>
@@ -64,8 +72,7 @@
 						<th class="border" scope="col" th:text="#{username}"></th>
 						<th class="border" scope="col" th:text="#{review}"></th>
 						<th class="border" scope="col" th:text="#{rating}"></th>
-						<th sec:authorize="hasAuthority('MODERATOR')" scope="col"
-							class="border" th:text="#{delete}"></th>
+						
 					</tr>
 				</thead>
 				<tbody>
@@ -73,13 +80,6 @@
 						<td class="border" th:text="${reviewResult.user.login}"></td>
 						<td class="border" th:text="${reviewResult.reviewText}"></td>
 						<td class="border" th:text="${reviewResult.rating}"></td>
-						<td sec:authorize="hasAuthority('MODERATOR')" class="border">
-							<form th:action="${'/deleteReview/' + reviewResult.id}"
-								method="get">
-								<button type="submit" class="btn btn-danger" name="mediaId"
-									th:value="${media.id}" th:text="#{delete}"></button>
-							</form>
-						</td>
 					</tr>
 				</tbody>
 			</table>

@@ -71,4 +71,43 @@ public class MediaRatingRestController {
 			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
+	
+	
+	@GetMapping("/media/{id}")
+	public ResponseEntity<List<MediaRating>> getMediaRatingsByMediaId(@PathVariable("mediaId") long mediaId) {
+
+		int limit = 10;
+		Pageable pageable = PageRequest.of(0, limit, Sort.by("lastModifiedAt").descending());
+
+		try {
+			List<MediaRating> ratings = mediaRatingRepository.getMediaRatingsByMediaId(mediaId, pageable);
+
+			logger.info("The media with the media id " + mediaId + " has " + ratings.size() + " reviews");
+
+			return new ResponseEntity<>(ratings, HttpStatus.OK);
+
+		} catch (Exception e) {
+			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+	
+	@GetMapping("/averageRating/{id}")
+	public ResponseEntity<Float> getAverageRatingByMediaId(@PathVariable("mediaId") long mediaId) {
+
+		try {
+			Float avgRating = mediaRatingRepository.getAverageRatingByMediaId(mediaId);
+			
+			if(avgRating == null) {
+				logger.warn("The media with the media id " + mediaId + " does not exist!");
+				return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+			}
+
+			return new ResponseEntity<>(avgRating, HttpStatus.OK);
+
+		} catch (Exception e) {
+			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+	
+	
 }

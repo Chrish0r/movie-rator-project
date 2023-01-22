@@ -52,11 +52,21 @@ class MovieratorApplicationTests {
 	@Test
 	public void mediaRatingClientSuccessfullyReturnsMediaRatings() throws JsonProcessingException {
 		
-		List<MediaRating> mediaRatingResponse = this.clientMediaRating.testGetMediaRatingsByUserIdRestAPI(1L);
+		List<MediaRating> mediaRatingResponse = this.clientMediaRating.testGetMediaRatingsByMediaIdRestAPI(1L);
 		
 		logger.info("Size of media rating list: " + mediaRatingResponse.size());
 		
 		assertNotNull(mediaRatingResponse);
+	}
+	
+	@Test
+	public void mediaRatingClientSuccessfullyReturnsMediaRatingsForMediaId() throws JsonProcessingException {
+
+		Float avgRating = this.clientMediaRating.testGetAverageRatingsByMediaIdRestAPI(1L);
+
+		logger.info("Average rating: " + avgRating);
+
+		assertNotNull(avgRating);
 	}
 
 }

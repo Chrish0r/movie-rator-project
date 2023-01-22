@@ -12,9 +12,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 
+import com.movierator.movierator.jokesApi.JokesApiClient;
+import com.movierator.movierator.jokesApi.RandomJoke;
 import com.movierator.movierator.model.Admin;
 import com.movierator.movierator.model.Moderator;
 import com.movierator.movierator.model.NewsletterSubscriber;
@@ -52,10 +55,17 @@ public class HomeController {
 	@Autowired
 	RegularUserRepository regularUserRepository;
 	
+	@Autowired
+	JokesApiClient jokesClient;
+	
 	@GetMapping("/")
 	public String home(@ModelAttribute("newsletterSubscribe") NewsletterSubscriber newsletterSubscriber,
-			HttpServletRequest request, Principal principal) {
+			HttpServletRequest request, Principal principal, Model model) {
 
+		RandomJoke randomJoke = jokesClient.getRandomJoke();
+		
+		model.addAttribute("randomJoke", randomJoke);
+		
 		if (principal == null) {
 			return "index";
 		}
