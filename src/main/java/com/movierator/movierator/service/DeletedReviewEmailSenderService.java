@@ -18,8 +18,9 @@ public class DeletedReviewEmailSenderService {
 		String email = rating.getUser().getEmail();
 		
 		SimpleMailMessage message = getConfirmationMessage();
-		
 		message.setTo(email);
+		emailSender.send(message);
+		
 		emailSender.send(message);
 	}
 
