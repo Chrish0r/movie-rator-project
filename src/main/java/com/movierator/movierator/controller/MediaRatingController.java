@@ -59,7 +59,6 @@ public class MediaRatingController {
 			return "user/user-not-found";
 		}
 
-
 		// limited to ten latest reviews
 		List<MediaRating> foundMediaRatings = mediaRatingRepository.getMediaRatingsByUserLimitedTo(userFoundOpt.get(),
 				pageable);

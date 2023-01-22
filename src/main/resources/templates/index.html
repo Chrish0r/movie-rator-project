@@ -49,6 +49,19 @@
 					</div>
 				</form>
 			</div>
+					<div class="mt-4">
+				<h4 th:text="#{avg_score}"></h4>
+				<form action="#" th:action="@{/api/holidays}" method="GET">
+					<div class="row my-2">
+						<input type="text" name="searchTerm" required
+							th:value="${searchTerm}" class="form-control"
+							th:placeholder="#{user_name}" />
+					</div>
+					<div class="row my-2">
+						<button type="submit" class="btn btn-primary" th:text="#{search}"></button>
+					</div>
+				</form>
+			</div>
 		</div>
 		<div class="container mt-5 text-start">
 			<div class="row">

@@ -19,7 +19,7 @@
 
 			<div class="form-group">
 	           <label for="user.email">Email</label> 
-	           <input id="user.email" type="text" class="form-control" placeholder="Enter email"
+	           <input id="user.email" type="email" class="form-control" th:errorclass="is-invalid" placeholder="Enter email"
 	                   th:field="*{user.email}"/>
 	                   
 	            <p class="alert alert-danger" role="alert" th:if="${#fields.hasErrors('user.email')}"

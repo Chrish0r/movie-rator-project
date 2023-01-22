@@ -152,13 +152,6 @@ public class UserController {
 		User userDB = userRepository.findById(userForm.getId()).get();
 		// before updating email
 		String currentEmail = userDB.getEmail();
-		
-		// limited to email field
-		if (bindingResult.hasFieldErrors("user.email")) {
-			logger.warn(bindingResult.toString());
-			mv.setViewName("/user/user-regular-user-update");
-			return mv;
-		}
 
 		// ensuring uniqueness of email
 		List<String> allExistingEmails = userRepository.findAllExistingEmails();
@@ -189,7 +182,7 @@ public class UserController {
 		regularUserRepository.save(regularUserForm);
 
 		mv.addObject("user updated", "Regular user updated!");
-		mv.setViewName("redirect:/");
+		mv.setViewName("user/user-regular-user-email-updated-success");
 		return mv;
 	}
 
