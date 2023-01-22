@@ -8,7 +8,7 @@
 <body>
 	<div layout:fragment="content" class="text-center">
 		<h1 class="mt-5">
-			<em>Movie Rator</em>
+			<em>MovieRator</em>
 		</h1>
 		<div class="container text-start my-4" style="max-width: 350px">
 			<div>
@@ -50,19 +50,6 @@
 					</div>
 				</form>
 			</div>
-					<div class="mt-4">
-				<h4 th:text="#{avg_score}"></h4>
-				<form action="#" th:action="@{/api/holidays}" method="GET">
-					<div class="row my-2">
-						<input type="text" name="searchTerm" required
-							th:value="${searchTerm}" class="form-control"
-							th:placeholder="#{user_name}" />
-					</div>
-					<div class="row my-2">
-						<button type="submit" class="btn btn-primary" th:text="#{search}"></button>
-					</div>
-				</form>
-			</div>
 		</div>
 		<div class="container mt-5 text-start">
 			<div class="row">
@@ -85,8 +72,16 @@
 			</form>
 			<div class="align-self-center mt-4 py-2 px-2 border border-dark">
 				<h4 th:text="#{joke}"></h4>
-				<div class="" id="exampleFormControlTextarea1"
-					rows="3" th:text="${randomJoke.setup + ' ' + randomJoke.punchline}" disabled readonly></div>
+				<div class="" id="exampleFormControlTextarea1" rows="3"
+					th:text="${randomJoke.setup + ' ' + randomJoke.punchline}" disabled
+					readonly></div>
+			</div>
+
+			<div>
+			<br>
+				<h4 th:text="#{bored_activity}"></h4>
+				<a style="margin-right: 10px;"
+					class="btn btn-primary" th:text="#{suggested_activity}" th:href="@{/api/activity/}"></a>
 			</div>
 		</div>
 	</div>

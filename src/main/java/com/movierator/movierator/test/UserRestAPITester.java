@@ -31,6 +31,7 @@ public class UserRestAPITester {
     }
 	
 	public User testGetUserAPI(Long id) {
+		String url = "http://localhost:8080/api/users/{id}";
 		
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
@@ -38,13 +39,14 @@ public class UserRestAPITester {
 		HttpEntity<Void> requestEntity = new HttpEntity<>(headers);
 		
 		return this.restTemplate
-				.exchange("http://localhost:8080/api/users/{id}", 
+				.exchange(url, 
 			    		  HttpMethod.GET, requestEntity, User.class, id)
 			      .getBody();
 	}
 	
 	@SuppressWarnings("unused")
 	public List<User> testGetAllActiveUsersRestAPI() {
+		String url = "http://localhost:8080/api/users/";
 		
 		HttpHeaders headers = new HttpHeaders();
 	    headers.setContentType(MediaType.APPLICATION_JSON);
@@ -52,7 +54,7 @@ public class UserRestAPITester {
 	    HttpEntity<Void> requestEntity = new HttpEntity<>(headers);
 	 
 	    ResponseEntity<User[]> responseEntity =
-	    		   restTemplate.getForEntity("http://localhost:8080/api/users/", User[].class);
+	    		   restTemplate.getForEntity(url, User[].class);
 	    User[] users = responseEntity.getBody();
 	    
 	    ObjectMapper mapper = new ObjectMapper();

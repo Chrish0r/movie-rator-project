@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
@@ -19,7 +18,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JSR310Module;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.movierator.movierator.model.MediaRating;
-import com.movierator.movierator.model.User;
 
 @SuppressWarnings("deprecation")
 @Component
@@ -41,13 +39,14 @@ public class MediaRatingRestAPITester {
 	 */
 	@SuppressWarnings("unused")
 	public List<MediaRating> testGetMediaRatingsByUserIdRestAPI(@PathVariable Long id) {
-
+		String url = "http://localhost:8080/api/reviews/";
+		
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
 
 		HttpEntity<Void> requestEntity = new HttpEntity<>(headers);
 		
-		ResponseEntity<MediaRating[]> responseEntity = restTemplate.getForEntity("http://localhost:8080/api/reviews/" + id,
+		ResponseEntity<MediaRating[]> responseEntity = restTemplate.getForEntity(url + id,
 				MediaRating[].class);
 		MediaRating[] mediaRatings = responseEntity.getBody();
 

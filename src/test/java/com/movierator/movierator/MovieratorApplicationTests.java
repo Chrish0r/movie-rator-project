@@ -14,6 +14,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.movierator.movierator.model.MediaRating;
 import com.movierator.movierator.model.User;
+import com.movierator.movierator.model.dto.RandomActivity;
+import com.movierator.movierator.test.ActivityRestAPITester;
 import com.movierator.movierator.test.MediaRatingRestAPITester;
 import com.movierator.movierator.test.UserRestAPITester;
 
@@ -23,20 +25,23 @@ class MovieratorApplicationTests {
 
 	@Autowired
 	public UserRestAPITester clientUser;
-	
+
 	@Autowired
 	public MediaRatingRestAPITester clientMediaRating;
+
+	@Autowired
+	public ActivityRestAPITester clientActivity;
 
 	@Test
 	public void userClientSuccessfullyReturnsUser() throws JsonProcessingException {
 
-		User userResponse = this.clientUser.testGetUserAPI(5L);
+		User userResponse = this.clientUser.testGetUserAPI(1L);
 		logger.info("Obtained following user: " + userResponse.getLogin());
 
 		assertNotNull(userResponse);
 		// in this case the following test scenario in not required (from a logical
 		// point of view), but shown for demonstration purposes
-		assertEquals(userResponse.getLogin(), "andy");
+		assertEquals(userResponse.getLogin(), "anna");
 	}
 
 	@Test
@@ -48,17 +53,34 @@ class MovieratorApplicationTests {
 
 		assertNotNull(userResponse);
 	}
-	
+
+	@Test
+	public void activityClientSuccessfullyReturnsRandomActivity() throws JsonProcessingException {
+		RandomActivity activityResponse = this.clientActivity.testGetActivityAPI();
+		logger.info("Obtained following suggested random activity: " + activityResponse.toString());
+
+		assertNotNull(activityResponse);
+	}
+
 	@Test
 	public void mediaRatingClientSuccessfullyReturnsMediaRatings() throws JsonProcessingException {
-		
+
 		List<MediaRating> mediaRatingResponse = this.clientMediaRating.testGetMediaRatingsByMediaIdRestAPI(1L);
-		
+
 		logger.info("Size of media rating list: " + mediaRatingResponse.size());
-		
+
 		assertNotNull(mediaRatingResponse);
 	}
-	
+
+	@Test
+	public void mediaRatingClientSuccessfullyReturnsMediaRatingsByUser() throws JsonProcessingException {
+
+		List<MediaRating> mediaRatingResponse = this.clientMediaRating.testGetMediaRatingsByUserIdRestAPI(1L);
+		logger.info("Size of media rating list: " + mediaRatingResponse.size());
+
+		assertNotNull(mediaRatingResponse);
+	}
+
 	@Test
 	public void mediaRatingClientSuccessfullyReturnsMediaRatingsForMediaId() throws JsonProcessingException {
 

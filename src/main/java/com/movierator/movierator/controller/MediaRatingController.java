@@ -25,7 +25,6 @@ import com.movierator.movierator.model.MediaRating;
 import com.movierator.movierator.model.User;
 import com.movierator.movierator.repository.MediaRatingRepository;
 import com.movierator.movierator.repository.UserRepository;
-import com.movierator.movierator.service.DeletedReviewEmailSenderService;
 
 @Controller
 public class MediaRatingController {
@@ -110,8 +109,6 @@ public class MediaRatingController {
 		Optional<MediaRating> optMedia = mediaRatingRepository.findById(reviewId);
 		long mediaId = optMedia.get().getMediaId();
 		mediaRatingRepository.deleteById(reviewId);
-		
-		new DeletedReviewEmailSenderService().sendConfirmationMailForDeletedReview(optMedia.get());
 		
 		return "redirect:/media/" + mediaId;
 	}
