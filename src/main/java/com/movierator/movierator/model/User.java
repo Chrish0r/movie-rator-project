@@ -57,17 +57,6 @@ public class User implements Serializable {
 	@JoinTable(name = "users_authorities", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "authority_id"))
 	private List<Authority> myAuthorities = new ArrayList<Authority>();
 
-	/*
-	 * referencing annotation must be removed, otherwise issues will be caused
-	 * regarding providing the application as a RestAPI, because an infinite
-	 * referencing loop will result in a stack overflow exception. This means that
-	 * only one of the both interdependent entities {@link User} and {@link
-	 * MediaRating} can be referenced by annotation.
-	 * 
-	 */
-//	@OneToMany(mappedBy = "user")
-//	private List<MediaRating> mediaRatings = new ArrayList<>();
-
 	public User() {
 
 	}

@@ -29,19 +29,17 @@ public class SecurityConfiguration {
 
 		http.authorizeRequests()
 				.antMatchers("/**").permitAll()
-				.antMatchers("/start").permitAll() // index view
 				.antMatchers("/api/**").permitAll()
 				.antMatchers("/user/**").permitAll()
 				.antMatchers("/login").permitAll()
-
-				.antMatchers("/admin/**", "/settings/**").hasAuthority("ADMIN") // only admins can access this page
-				// more permissions here....
-				.antMatchers("/moderator/**", "/settings/**").hasAuthority("MODERATOR") // only moderators can access this page
-				.antMatchers("/regular-user/**", "/settings/**").hasAuthority("REGULAR_USER") // only regular (and registered)
+				
 				.anyRequest().authenticated()
 				.and().formLogin()
 				.loginPage("/login")
-				.and().logout().logoutSuccessUrl("/login").invalidateHttpSession(true)
+				.and()
+				.logout()
+				.logoutSuccessUrl("/login")
+				.invalidateHttpSession(true)
 
 				.permitAll();
 

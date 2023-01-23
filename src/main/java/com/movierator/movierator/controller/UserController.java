@@ -14,7 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -29,6 +28,7 @@ import com.movierator.movierator.repository.MediaRatingRepository;
 import com.movierator.movierator.repository.ModeratorRepository;
 import com.movierator.movierator.repository.RegularUserRepository;
 import com.movierator.movierator.repository.UserRepository;
+import com.movierator.movierator.service.DeletedUserEmailSenderService;
 import com.movierator.movierator.util.Constants;
 
 @Controller
@@ -53,6 +53,9 @@ public class UserController {
 
 	@Autowired
 	RegularUserRepository regularUserRepository;
+	
+	@Autowired
+	DeletedUserEmailSenderService deletedUserEmailSenderService;
 
 	@RequestMapping("/user/add")
 	public ModelAndView showAddRegularUserForm() {
@@ -192,8 +195,6 @@ public class UserController {
 		User user = userRepository.findById(id)
 				.orElseThrow(() -> new IllegalArgumentException("Invalid user Id:" + id));
 
-//		List<MediaRating> mediaRatings = mediaRatingRepository.getMediaRatingsByUser(user);
-
 		user.setActive(0);
 		userRepository.save(user);
 
@@ -210,7 +211,9 @@ public class UserController {
 		ModelAndView mv = new ModelAndView();
 		mv.setViewName("user/user-account-deleted");
 		mv.addObject("user deleted", "User deleted!");
-
+		
+		deletedUserEmailSenderService.sendConfirmationMailForDeletedUser(user);
+		
 		return mv;
 	}
 }
