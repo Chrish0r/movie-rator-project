@@ -55,12 +55,11 @@ public class RandomActivity {
 	
 	@Override
     public String toString() {
-        String activityStr =
-		this.activity + " \n " +
-        this.type + " \n " +
-        this.participants + " \n " ;
-        
-        return activityStr;
+        return "("
+        		+ "activity description: " + this.activity + "; "
+        		+ "type: " + this.type + "; "
+                + "suggested number of participants: " + this.participants
+                + ")";
     }
 	
 }

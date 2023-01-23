@@ -24,10 +24,6 @@ public class Authority implements Serializable {
 
 	private String description;
 
-	/* Causes problems with Spring Boot Security - might attempt later again */
-//	@Enumerated(EnumType.STRING)
-//	private UserRoleType description;
-
 	public Authority(Long authority_id) {
 		this.id = authority_id;
 	}
@@ -43,14 +39,6 @@ public class Authority implements Serializable {
 	public void setId(Long id) {
 		this.id = id;
 	}
-
-//	public UserRoleType getDescription() {
-//		return description;
-//	}
-//
-//	public void setDescription(UserRoleType description) {
-//		this.description = description;
-//	}
 
 	public String getDescription() {
 		return description;
