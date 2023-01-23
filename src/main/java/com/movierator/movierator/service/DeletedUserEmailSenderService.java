@@ -41,10 +41,13 @@ public class DeletedUserEmailSenderService {
 	private String getEmailBody(User user) {
 
 		return "Dear " + user.getLogin() + "," + System.lineSeparator()
+		        + System.lineSeparator()
 				+ "we inform you that your user account has has been deleted successfully!" + System.lineSeparator()
 				+ "Should you ever wish to restore your account with all your previous account information, then please contact our support."
 				+ System.lineSeparator() + "But please be aware that all your reviews have been deleted ultimately."
-				+ System.lineSeparator() + "We hope to see you again!" + System.lineSeparator() + "Best regards,"
+				+ System.lineSeparator() + "However, as already stated, all your account information and your account settings can be restored." 
+				+ System.lineSeparator() + "We hope to see you again!" 
+				+ System.lineSeparator() + System.lineSeparator() +  "Best regards,"
 				+ System.lineSeparator() + "Your MovieRator Team";
 	}
 }
