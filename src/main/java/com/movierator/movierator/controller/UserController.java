@@ -146,7 +146,7 @@ public class UserController {
 	}
 
 	@RequestMapping(value = "/user/regular-user/update/process")
-	public ModelAndView updateRegularUser(@Valid @ModelAttribute("regularUserForm") RegularUser regularUserForm,
+	public ModelAndView updateEmailByRegularUser(@Valid @ModelAttribute("regularUserForm") RegularUser regularUserForm,
 			BindingResult bindingResult) {
 
 		ModelAndView mv = new ModelAndView();
