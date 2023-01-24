@@ -68,7 +68,7 @@ public class MediaController {
 			return "media-not-found";
 		}
 
-		if (!allReviewsForMedia.isEmpty()) {
+		if (userOpt.isPresent() && !allReviewsForMedia.isEmpty()) {
 			Iterator<MediaRating> iterator = allReviewsForMedia.iterator();
 			while (iterator.hasNext()) {
 				MediaRating rating = iterator.next();
