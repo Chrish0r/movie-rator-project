@@ -55,8 +55,8 @@
 			<div class="row">
 				<h4 th:text="#{sub_newsletter}"></h4>
 			</div>
-			<form action="#" th:action="@{/subscribe-to-newsletter}"
-				th:object="${newsletterSubscribe}" method="post">
+			<form action="#" th:action="@{/newsletter-subscriber}"
+				th:object="${newsletterSubscriber}" method="post">
 				<div class="row">
 					<div class="col-3">
 						<input type="email" th:field="*{email}" required

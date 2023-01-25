@@ -59,7 +59,7 @@ public class HomeController {
 	JokesApiClient jokesClient;
 	
 	@GetMapping("/")
-	public String home(@ModelAttribute("newsletterSubscribe") NewsletterSubscriber newsletterSubscriber,
+	public String home(@ModelAttribute("newsletterSubscriber") NewsletterSubscriber newsletterSubscriber,
 			HttpServletRequest request, Principal principal, Model model) {
 
 		RandomJoke randomJoke = jokesClient.getRandomJoke();
