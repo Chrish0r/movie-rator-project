@@ -16,7 +16,7 @@ import com.movierator.movierator.model.User;
 public interface MediaRatingRepository extends CrudRepository<MediaRating, Long> {
 	List<MediaRating> getByMediaId(Long mediaId);
 
-	@Query("SELECT AVG(r.rating) FROM MediaRating r WHERE r.mediaId = ?1")
+	@Query("SELECT COALESCE(AVG(r.rating), 0) FROM MediaRating r WHERE r.mediaId = ?1")
 	Float getAverageRatingByMediaId(Long mediaId);
 
 	@Query("SELECT r FROM MediaRating r WHERE r.user = ?1 AND r.mediaId = ?2")
