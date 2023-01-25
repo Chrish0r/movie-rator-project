@@ -105,4 +105,10 @@ public class HomeController {
 		
 		return "index";
 	}
+	
+	@GetMapping("/work-in-progress")
+	public String showWorkInProgressPage(Model model) {
+		System.out.println("break");
+		return "work-in-progress";
+	}
 }
