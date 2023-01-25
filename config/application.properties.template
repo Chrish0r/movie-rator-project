@@ -5,6 +5,7 @@ spring.datasource.username=username
 spring.datasource.password=password
 spring.sql.init.mode=always
 hibernate.auto_quote_keyword=true
+spring.mvc.hiddenmethod.filter.enabled=true
 
 tmdb.url=https://api.themoviedb.org/3
 tmdb.api_token=
@@ -17,5 +18,3 @@ spring.mail.username=
 spring.mail.password=
 spring.mail.properties.mail.smtp.auth=true
 spring.mail.properties.mail.smtp.starttls.enable=true
-
-spring.mvc.hiddenmethod.filter.enabled=true
