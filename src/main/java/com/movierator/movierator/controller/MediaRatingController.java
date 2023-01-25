@@ -122,8 +122,20 @@ public class MediaRatingController {
 
 	@GetMapping("/edit/{id}")
 	public String editReview(@PathVariable long id, Model model) {
-		model.addAttribute("id", id);
-		model.addAttribute("reviewForm", new Review());
+		String userName = SecurityContextHolder.getContext().getAuthentication().getName();
+		Optional<User> optUser = userRepository.findUserByLogin(userName);
+		
+		if(optUser.isPresent()) {
+			User user = optUser.get();
+			
+			MediaRating rating = mediaRatingRepository.getByUserNameAndMediaId(user, id);
+			Review review = new Review();
+			review.setRating(rating.getRating());
+			review.setReviewText(rating.getReviewText());
+			model.addAttribute("id", id);
+			model.addAttribute("reviewForm", review);
+		}
+		
 		return "edit-review";
 	}
 

@@ -59,7 +59,7 @@
 							</select>
 						</div>
 						<textarea type="text" class="form-control" rows="5"
-							id="reviewText" th:field="*{reviewText}">></textarea>
+							id="reviewText" th:field="*{reviewText}" th:text="${reviewTextForEdit}"></textarea>
 						<input type="submit" class="btn btn-primary mt-3" th:value="#{confirm}">
 					</div>
 				</form>
