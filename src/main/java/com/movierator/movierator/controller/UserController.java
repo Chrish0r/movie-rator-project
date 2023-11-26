@@ -155,6 +155,9 @@ public class UserController {
 		User userDB = userRepository.findById(userForm.getId()).get();
 		// before updating email
 		String currentEmail = userDB.getEmail();
+		
+		
+		
 
 		// ensuring uniqueness of email
 		List<String> allExistingEmails = userRepository.findAllExistingEmails();
